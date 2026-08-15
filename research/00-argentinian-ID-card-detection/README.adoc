@@ -1,0 +1,307 @@
+= *Argentina ID Card Detection Report*
+
+:author: Nahuel
+:revnumber: 1.0.0
+:revdate: 2026-08-14
+:toc: left
+:toclevels: 3
+:sectnums:
+:icons: font
+
+[abstract]
+== *Executive Summary*
+
+This work builds an *end-to-end pipeline* to detect Argentine ID Cards (DNI) using a *YOLOv26 OBB* model.
+
+To do this work I used a public images downloaded from the internet, some pictures taken by me and some pictures taken by my friends. As this samples are not enough to train a model, I increased the number of samples using synthetic data generated from templates and fake data with the library of `faker`. The final dataset has aproximately 900 samples. This dataset are not public, except for synthetic examples.
+
+The *YOLOv26 OBB small* model was selected for production, reaching *mAP@50 = 0.956*
+with *Precision 0.97 / Recall 0.98 / F1 0.98*. Since inference runs on a server
+(no edge/latency constraint), the small model is preferred over the nano variant,
+which stayed ~4.6 pp below in mAP@50.
+
+== *Introduction & Objective*
+
+=== *Problem Statement*
+
+Detect and localize the Argentine ID card in images (rotated, over different backgrounds).
+
+=== *Success Criteria*
+
+* Detect both document sides: `front` and `back`.
+* Detect the document in arbitrary rotations and backgrounds.
+* Achieve a mAP@50 >= 90 and mAP@95 >= 85 on a held-out test set of real images.
+
+=== *Scope*
+
+* *In scope:* card detection (2 classes `front` and `back`) with OBB.
+* *Out of scope:* OCR, face detection, MRZ reading, etc.
+
+== *Libraries & Tools*
+To achieve the goal of this work, I used the following libraries:
+
+* `faker`
+* `ultralytics`
+* `opencv`
+* `pillow`
+* `google-genai`
+* `openai`
+* `torch`
+
+=== *Reproducibility notes*
+
+* Download the weights from https://platform.ultralytics.com/ultralytics/yolo26/yolo26s-obb[YOLO26S-OBB-] y https://platform.ultralytics.com/ultralytics/yolo26/yolo26n-obb[YOLO26N-OBB] and https://huggingface.co/facebook/sam3/blob/main/sam3.pt[SAM3] from HuggingFace.
+* Fixed `seed=42` in `TRAIN_CFG`.
+* Weights stored at `weights/yolo/yolo26s-obb-DNI-det.pt`.
+
+== *Background: Why Oriented Bounding Boxes (OBB)?*
+
+Standard axis-aligned boxes enclose a rotated card with a large amount of
+background, hurting localization quality. OBB predicts a box aligned to the real
+orientation of the card, which is critical for cropping and perspective correction.
+
+* Standard box: `cls x_center y_center w h`
+* *OBB box* (this project): `cls x1 y1 x2 y2 x3 y3 x4 y4`
+
+== *Dataset*
+
+=== *Sources*
+
+Because real samples were scarce, the dataset combines two sources:
+
+* *Real data:* public images downloaded from the internet, some pictures taken by me and some pictures taken by my friends. This set is small (~200 samples) and was pre-labeled with SAM3 and manually corrected.
+* *Synthetic data:* generated from templates and fake data with the library of `faker`. The final dataset has aproximately 900 samples. This dataset are not public, except for synthetic examples.
+
+=== *Classes & split counts*
+
+[cols="2,1,1,1,1", options="header"]
+|===
+|  | Train | Val | Test | Total
+| *Samples* | 797 | 50 | 55 | 902
+|===
+
+=== *Example ID Cards*
+
+++++
+<table>
+  <tr>
+    <td align="center" style="padding: 10px;">
+      <img src="./assets/doc1.jpg" width="420"><br>
+      <em>Figure 1. Example 1</em>
+    </td>
+    <td align="center" style="padding: 10px;">
+      <img src="./assets/doc2.png" width="420"><br>
+      <em>Figure 2. Example 2</em>
+    </td>
+  </tr>
+
+   <tr>
+    <td align="center" style="padding: 10px;">
+      <img src="./assets/doc3.jpg" width="420"><br>
+      <em>Figure 3. Example 3</em>
+    </td>
+    <td align="center" style="padding: 10px;">
+      <img src="./assets/doc4.jpg" width="420"><br>
+      <em>Figure 4. Example 4</em>
+    </td>
+  </tr>
+</table>
+++++
+
+=== Limitations & assumptions
+
+* The test set is *small (55)*.
+* The dataset is *not public* (except the synthetic examples).
+
+
+== *Process Overview*
+
+The dataset construction and model training were split into a sequential pipeline
+of six notebooks. Each notebook produces the input for the next one, following the
+naming convention `NN_<step>_vX.Y.Z.ipynb`.
+
+[cols="1,3,3,3", options="header"]
+|===
+| # | Notebook | Goal | Output
+
+| 00
+| `00_draw_DNI_zones`
+| Delimit and draw the field zones (photo, names, MRZ, etc.) over the ID-card
+templates and store their relative coordinates.
+| `config/coords_data.json` with the normalized zones per document type
+(DNI/Card, front/back).
+
+| 01
+| `01_generate_sinthetic_examples`
+| Generate synthetic ID cards by filling the templates with fake personal data
+(`faker`) and pasting real faces (Flickr-Faces-HQ) into the photo zone.
+| Synthetic front/back ID-card images.
+
+| 02
+| `02_backgrounds`
+| Generate realistic backgrounds (desks, tables, hands, floors) using image
+generation models (`gpt-image-1` and Gemini) to place the cards on.
+| Background image bank (`backgrounds/`, `backgrounds_1024/`).
+
+| 03
+| `03_generate_DNIs_sinthetic_ds`
+| Compose each synthetic card over a random background applying random rotation,
+perspective warp, drop shadow.
+| Synthetic dataset with images + YOLO **OBB** labels (`cls x1 y1 x2 y2 x3 y3 x4 y4`).
+
+| 04
+| `04_annotate_DNIs_ds`
+| Auto-label the *real* samples (public + own photos) using **SAM3** segmentation
+to produce OBB annotations without manual drawing (pre-labeling).
+| Pre-labeled real samples in YOLO OBB format.
+
+| 05
+| `05_review_and_correct_labels`
+| Quality control: inspect the pre-labeled dataset in **FiftyOne** and fix the
+wrong boxes in **CVAT**.
+| Curated and corrected ground-truth dataset.
+
+| 06
+| `06_train_and_metrics`
+| Fine-tune the **YOLOv26 OBB** model (nano and small) and evaluate it on the
+held-out `test` split (Precision, Recall, F1, mAP@50).
+| Fine-tuned weights (`yolo26s-obb-DNI-det.pt`) and evaluation report.
+|===
+
+=== Data strategy
+
+Because real annotated samples were scarce, the dataset combines two sources:
+
+* *Synthetic data* (notebooks 00–03): fully controlled generation where the labels
+are exact by construction (no manual annotation needed).
+* *Real data* (notebooks 04–05): a smaller set of real photos, pre-labeled with
+SAM3 and manually corrected, which grounds the model on real-world appearance.
+
+This mix reaches ~900 samples and lets the detector learn arbitrary rotations and
+backgrounds while keeping annotation cost low.
+
+== *Model Training*
+
+=== *Training configuration*
+
+[cols="2,3", options="header"]
+|===
+| Parameter | Value
+
+| Base checkpoints | `yolo26n-obb`, `yolo26s-obb`
+| Epochs | 100
+| Image size | 640
+| Batch | 16
+| Patience | 25
+| Seed | 42 (fixed, fair comparison)
+| Device | CUDA (GPU) / CPU fallback
+|===
+
+=== *Evaluation protocol*
+
+Metrics are computed *only on the test view* to avoid counting train/val ground
+truths as false negatives.
+
+[cols="2,1,3", options="header"]
+|===
+| Parameter | Value | Role
+
+| `conf` | 0.6 | Min confidence to keep a detection (inference)
+| `iou` (NMS) | 0.3 | Suppress overlapping duplicate boxes (inference)
+| `iou` (eval) | 0.5 | Min overlap to count a prediction as TP (evaluation)
+|===
+
+
+== *Results*
+
+=== *Metrics table (nano vs small)*
+
+Evaluated on the `test` split (55 samples), `conf=0.6`, NMS `iou=0.3`, eval `iou=0.5`.
+
+[cols="2,1,1,1,1,1,1", options="header"]
+|===
+| Model | Params | Size (MB) | Precision | Recall | F1 | mAP@50
+
+| YOLO26n-OBB (nano)  | ~3.0 M | ~5.5 | 1.00 | 0.95 | 0.97 | 0.910
+| YOLO26s-OBB (small) | ~9.7 M | ~19  | 0.97 | 0.98 | 0.98 | *0.956*
+|===
+
+=== *Example detections against **val** split*
+
+++++
+<table>
+   <tr>
+    <td align="center" style="padding: 10px;">
+      <img src="./assets/val_batch1_pred_nano.jpg" width="800"><br>
+      <em>Figure 1. Inference with YOLO26n-OBB (nano)</em>
+    </td>
+    <td align="center" style="padding: 10px;">
+      <img src="./assets/val_batch2_pred_small.jpg" width="800"><br>
+      <em>Figure 2. Inference with YOLO26s-OBB (small)</em>
+    </td>
+  </tr>
+</table>
+++++
+
+=== *Results summary*
+
+==== *Nano Model Summary*
+
+++++
+<table>
+   <tr>
+    <td align="center" style="padding: 10px;">
+    <img src="./assets/results_nano.png" width="1000"><br>
+      <em>Figure 1. Training Summary of YOLO26n-OBB (nano)</em>
+    </td>
+  </tr>
+</table>
+++++
+
+==== *Small Model Summary*
+
+++++
+<table>
+   <tr>
+    <td align="center" style="padding: 10px;">
+    <img src="./assets/results_small.png" width="1000"><br>
+      <em>Figure 1. Training Summary of YOLO26s-OBB (small)</em>
+    </td>
+  </tr>
+</table>
+++++
+
+=== *Model Selection & decision*
+
+We select the *smallest* model whose gap to the best `mAP@50` stays within *1 pp*.
+The nano model is ~4.6 pp below, i.e. *outside* the tolerance. In addition, inference
+runs on a *server* (size/latency are not hard constraints). Therefore the *small*
+model is kept as the production checkpoint (`yolo26s-obb-DNI-det.pt`).
+
+== *Error Analysis*
+
+* Residual errors concentrate on `front` class, typically when the card is very rotated.
+
+== *Risks and Threats to Validity*
+
+* Domain Gap:* Heavy reliance on synthetic data may not reflect actual camera usage.
+* Small Test Set:* Differences of a few points may fall within the margin of error.
+* Selection Bias:* Backgrounds generated by image models may not always match real-world usage.
+
+== *Future Work*
+
+. Increase the number of samples with *real* ID-Card photos.
+. Increase the number of samples in our *test* set.
+. Run robustness stress tests (blur, JPEG, low light, motion).
+. Periodic re-training / recalibration as new data arrives.
+
+== *Conclusions*
+
+The pipeline successfully produces a working OBB detector from a mostly synthetic dataset. The *small* model meets the success criterion (*mAP@50 = 0.956 >= 0.90*)
+with balanced precision/recall and is selected for server-side deployment. The main open risk is the *synthetic-to-real domain gap*, addressed in Future Work.
+
+== *References*
+
+* Ultralytics YOLO (OBB task) documentation.
+* Meta SAM3 (Segment Anything Model).
+* Voxel51 FiftyOne / CVAT annotation tools.
