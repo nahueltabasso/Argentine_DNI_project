@@ -1,0 +1,33 @@
+FROM ultralytics/ultralytics:8.4.117-export
+
+ENV DIRECTORY=/opt/project/
+ENV PYTHONPATH=/opt/project/
+ENV DEBIAN_FRONTEND="noninteractive"
+
+RUN mkdir -p ${DIRECTORY}
+
+WORKDIR ${DIRECTORY}
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y curl wget git vim iputils-ping gcc libpq-dev software-properties-common locales  && \
+    apt-get install -y libqt5gui5 && \
+    ln -f -s /usr/bin/python3 /usr/bin/python && \ 
+    echo "es_AR.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen && \
+    locale -a && \
+    export LC_ALL="es_AR.utf8" && \
+    export LC_CTYPE="es_AR.utf8" && \
+    locale -a
+
+COPY data/ ${DIRECTORY}/data/
+COPY research/ ${DIRECTORY}/research/
+COPY weights/ ${DIRECTORY}/weights/
+COPY fonts/ ${DIRECTORY}/fonts/
+COPY Dockerfile_research ${DIRECTORY}/Dockerfile_research
+COPY requirements_research ${DIRECTORY}/requirements_research
+
+RUN pip install -r ${DIRECTORY}/requirements_research --no-cache-dir
+
+CMD ["tail", "-f", "/dev/null"]
+

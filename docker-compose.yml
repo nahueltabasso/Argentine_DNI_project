@@ -1,0 +1,29 @@
+services:
+  research:
+    container_name: research
+    build:
+      context: ./
+      dockerfile: Dockerfile_research
+    runtime: nvidia
+    environment:
+      - PYTHONPATH=/opt/project/
+      - BASE_WORKDIR=/opt/project/
+      - BASE_OUTPUT_WORKDIR=/opt/project/data/prc/outputs
+    ports:
+      - "5151:5151"
+    volumes:
+      - ./data:/opt/project/data
+      - .:/opt/project/
+    networks:
+      - default_network
+  
+  api:
+    container_name: api
+    build:
+      context: ./
+      dockerfile: Dockerfile_api
+
+networks:
+  default_network:
+    name: default_network
+    driver: bridge

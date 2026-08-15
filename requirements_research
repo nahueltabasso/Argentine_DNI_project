@@ -1,0 +1,12 @@
+pandas==3.0.3
+opencv-python==5.0.0.93
+pillow==12.3.0
+faker==40.28.1
+matplotlib==3.11.0
+torch==2.13.0
+openai==2.48.0
+google-genai==2.14.0
+ultralytics==8.4.117
+scikit-learn==1.9.0
+fiftyone==1.20.1
+shapely==2.1.2

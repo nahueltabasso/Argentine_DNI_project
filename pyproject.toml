@@ -1,0 +1,32 @@
+[project]
+name = "dni"
+version = "1.0.0"
+description = ""
+authors = [
+    {name = "nahueltabasso",email = "nahueltabasso@gmail.com"}
+]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "pandas (>=3.0.3,<4.0.0)",
+    "opencv-python (>=5.0.0.93,<6.0.0.0)",
+    "pillow (>=12.3.0,<13.0.0)",
+    "faker (>=40.28.1,<41.0.0)",
+    "matplotlib (>=3.11.0,<4.0.0)",
+    "torch (>=2.13.0,<3.0.0)",
+    "openai (>=2.48.0,<3.0.0)",
+    "google-genai (>=2.14.0,<3.0.0)",
+    "ultralytics (>=8.4.117,<9.0.0)",
+    "scikit-learn (>=1.9.0,<2.0.0)",
+    "fiftyone (>=1.20.1,<2.0.0)",
+    "shapely (>=2.1.2,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "ipykernel (>=7.3.0,<8.0.0)"
+]
