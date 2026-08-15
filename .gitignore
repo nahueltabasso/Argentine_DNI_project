@@ -1,0 +1,3 @@
+.venv/*
+data/*
+research/00-argentinian-ID-card-detection/runs/*
