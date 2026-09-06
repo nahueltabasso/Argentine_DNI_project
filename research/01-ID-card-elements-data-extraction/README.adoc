@@ -1,0 +1,247 @@
+= *Argentine ID Card Elements Detection and Data Extraction Report*
+
+:author: Nahuel
+:revnumber: 1.0.0
+:revdate: 2026-09-04
+:toc: left
+:toclevels: 3
+:sectnums:
+:icons: font
+
+[abstract]
+== *Executive Summary*
+
+This work builds an *end-to-end pipeline* to detect and extract data form the elements of the Argentine ID Card (DNI) using a *YOLOv26* model and OCR techniques for character reading.
+
+
+== *Fine-tuning the YOLOv26 model*
+
+=== *Introduction*
+
+To do this work, thanks to the DNI detector trained in the previous stage of the project, Argentine documents were extracted and cropped with prior perspective correction to remove backgrounds and rotations.
+
+After, with a *pre-labeling* pipeline, the elements of the DNI were labeled and a dataset was created. The dataset was split into training, validation and test sets.
+
+=== *Problem Statement*
+
+Detect and localize the elements of the Argentine ID card in images.
+
+=== *Success Criteria*
+
+* Detect the elements of the Argentine ID Card (DNI) in images.
+* Achieve a mAP@50 >= 85 and mAP@95 >= 80
+
+=== *Scope*
+
+* *In scope:* card elements detection (multiple classes).
+* *Out of scope:* OCR, face detection, MRZ reading, etc.
+
+== *Libraries & Tools*
+To achieve the goal of this work, I used the following libraries:
+
+* `ultralytics`
+* `opencv`
+* `pillow`
+* `torch`
+
+=== *Reproducibility notes*
+
+* Download the weights from https://platform.ultralytics.com/ultralytics/yolo26/yolo26s[YOLO26S].
+* Fixed `seed=42` in `TRAIN_CFG`.
+* Weights stored at `weights/yolo/yolo26s.pt`
+
+=== *Dataset*
+
+Were used samples from the **dataset** of the previous stage of the project as input data for the **pre-labeling** pipeline. The annotations of the elements of the DNI were generated and a new dataset for this stage was created with the follwing classes:
+
+* `picture`
+* `shield`
+* `doc_number`
+* `tramite_number`
+* `gender`
+* `pdf_417`
+* `country`
+* `mrz`
+* `address`
+
+Afterwards, the annotations of the different classes were corrected using *CVAT*. Then, the final **dataset** was split into `train`, `val` and `test` sets, leaving for the **test set** real DNI images (family, friends, public images from the internet).
+
+
+==== *Classes & split counts*
+
+[cols="2,1,1,1,1", options="header"]
+|===
+|  | Train | Val | Test | Total
+| *Samples* | 258 | 32 | 32 | 322
+|===
+
+==== *Example of pre-labeling pipeline*
+
+++++
+<table>
+  <tr>
+    <td align="center" style="padding: 10px;">
+      <img src="./assets/2086.png" width="420"><br>
+      <em>Figure 1. Input DNI</em>
+    </td>
+    <td align="center" style="padding: 10px;">
+      <img src="./assets/2086_a.png" width="420"><br>
+      <em>Figure 2. Extracted DNI</em>
+    </td>
+    <td align="center" style="padding: 10px;">
+      <img src="./assets/2086_b.png" width="420"><br>
+      <em>Figure 3. Elements of DNI labeled</em>
+    </td>
+  </tr>
+</table>
+++++
+
+=== Limitations & assumptions
+
+* The test set is *small (32)*.
+* The dataset is *not public* (except the synthetic examples).
+
+== *Process Overview*
+
+The dataset construction and model training were split into a sequential pipeline of four notebooks. Each notebook produces the input for the next one, following the
+naming convention `NN_<step>_vX.Y.Z.ipynb`.
+
+[cols="1,3,3,3", options="header"]
+|===
+| # | Notebook | Goal | Output
+| 00
+| `00_extract_DNI_from_image`
+| Extract the elements of the Argentine ID Card from images with our trained YOLOv26 OBB model.
+| Extracted Argentine ID cards.
+
+| 01
+| `01_annotate_elements_of_DNI`
+| Auto-label the elements of the Argentine ID Card usign the `coords_data.json` file generated in the previous stage.
+| Pre-labeled real samples in YOLO format.
+
+| 02
+| `02_review_correct_labels`
+| Quality control: inspect the pre-labeled dataset in **FiftyOne** and fix the
+wrong boxes in **CVAT**.
+| Curated and corrected ground-truth dataset.
+
+| 03
+| `03_train_and_metrics`**
+| Fine-tune the **YOLOv26 Small** model with the curated dataset and evaluate the performance on the test set.
+| Fine-tuned weights (`yolo26s_ID_elements_det.pt`) and evaluation report.
+|===
+
+
+=== *Model Training*
+
+==== *Training Configuration*
+
+[cols="2,3", options="header"]
+|===
+| Parameter | Value
+
+| Base checkpoints | `yolo26s`
+| Epochs | 100
+| Image size | 1216
+| Batch | 16
+| Patience | 25
+| Learning Rate | 0.01
+| Seed | 42 (fixed, fair comparison)
+| Device | CUDA (GPU) / CPU fallback
+|===
+
+=== *Evaluation protocol*
+
+Metrics are computed *only on the test view* to avoid counting train/val ground
+truths as false negatives.
+
+[cols="2,1,3", options="header"]
+|===
+| Parameter | Value | Role
+
+| `conf` | 0.5 | Min confidence to keep a detection (inference)
+| `iou` (NMS) | 0.5 | Suppress overlapping duplicate boxes (inference)
+| `iou` (eval) | 0.5 | Min overlap to count a prediction as TP (evaluation)
+|===
+
+
+=== *Results*
+
+==== *Metrics table (nano vs small)*
+
+Evaluated on the `test` split (32 samples), `conf=0.5`, NMS `iou=0.5`, eval `iou=0.5`.
+
+[cols="2,1,1,1,1,1,1", options="header"]
+|===
+| Model | Params | Size (MB) | Precision | Recall | F1 | mAP@50
+
+| YOLO26s (small) | ~9.7 M | ~19  | 0.99 | 0.94 | 0.97 | *0.97*
+|===
+
+==== *Small Model Summary*
+
+++++
+<table>
+   <tr>
+    <td align="center" style="padding: 10px;">
+    <img src="./assets/results.png" width="1000"><br>
+      <em>Figure 1. Training Summary of YOLO26s (small)</em>
+    </td>
+  </tr>
+</table>
+++++
+
+==== *Class-level Performance (Test Set)*
+
+Evaluated on the `test` split (32 samples, 159 total instances).
+
+[cols="3,1,1,1,1", options="header"]
+|===
+| Class | Precision | Recall | F1-Score | Support
+
+| `address` | 1.00 | 1.00 | 1.00 | 11
+| `country` | 1.00 | 0.91 | 0.95 | 11
+| `doc_number` | 1.00 | 0.95 | 0.98 | 21
+| `gender` | 0.94 | 0.81 | 0.87 | 21
+| `mrz` | 1.00 | 1.00 | 1.00 | 11
+| `pdf_417` | 1.00 | 1.00 | 1.00 | 21
+| `picture` | 1.00 | 1.00 | 1.00 | 21
+| `shield` | 1.00 | 0.95 | 0.98 | 21
+| `tramite_number` | 1.00 | 0.90 | 0.95 | 21
+| *Macro Avg* | *0.99* | *0.95* | *0.97* | *159*
+| *Weighted Avg* | *0.99* | *0.94* | *0.97* | *159*
+|===
+
+[NOTE]
+====
+Elements with larger physical area or high-contrast patterns (`picture`, `pdf_417`, `mrz`, `address`) achieved perfect F1-scores (1.00). Smaller text elements such as `gender` (F1=0.87) and `tramite_number` (F1=0.95) represent the main bottleneck due to lower recall on smaller bounding box areas.
+====
+
+==== *Example detections against **val** split*
+
+++++
+<table>
+   <tr>
+    <td align="center" style="padding: 10px;">
+      <img src="./assets/val_batch0_labels.jpg" width="800"><br>
+      <em>Figure 1. Ground truth</em>
+    </td>
+    <td align="center" style="padding: 10px;">
+      <img src="./assets/val_batch0_pred.jpg" width="800"><br>
+      <em>Figure 2. Inference with YOLO26s</em>
+    </td>
+  </tr>
+</table>
+++++
+
+
+=== *Conclusions*
+
+* Residuals errors concentrate on `gender` and `tramite_number` classes, which are smaller text elements.
+* The model is able to detect and localize the elements of the Argentine ID card in images.
+* Small dataset and limited test set size with an advantage that is composed by real images of Argentine ID cards.
+
+=== *References*
+
+* Ultralytics YOLO (OBB task) documentation.
+* Voxel51 FiftyOne / CVAT annotation tools.
