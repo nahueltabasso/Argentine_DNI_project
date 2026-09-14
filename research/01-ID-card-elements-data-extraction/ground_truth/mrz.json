@@ -6,22 +6,22 @@
     },
     {
         "2327_0.png": {
-            "ground_truth": "I<ARG195025194<<<<<<<<<<<<<<<\n7508228F3207110ARG<<<<<<<<<<<2\nLUNA<<THIAGO<BRAVO<<<<<<<<<<<<"
+            "ground_truth": "I<ARG195025194<<<<<<<<<<<<<<<<\n7508228F3207110ARG<<<<<<<<<<<2\nLUNA<<THIAGO<BRAVO<<<<<<<<<<<<"
         }
     },
     {
         "2085_0.png": {
-            "ground_truth": "I<ARG264447692<<<<<<<<<<<<<<<\n5012192M3410130ARG<<<<<<<<<<<2\nVALDEZ<<GERONIMO<ROMERO<<<<<<<"
+            "ground_truth": "I<ARG264447692<<<<<<<<<<<<<<<<\n5012192M3410130ARG<<<<<<<<<<<2\nVALDEZ<<GERONIMO<ROMERO<<<<<<<"
         }
     },
     {
         "2257_0.png": {
-            "ground_truth": "I<ARG187463968<<<<<<<<<<<<<<<\n0206307F3411045ARG<<<<<<<<<<<8\nFERNANDEZ<<PEDRO<<<<<<<<<<<<<"
+            "ground_truth": "I<ARG187463968<<<<<<<<<<<<<<<<\n0206307F3411045ARG<<<<<<<<<<<8\nFERNANDEZ<<PEDRO<<<<<<<<<<<<<<"
         }
     },
     {
         "2157_0.png": {
-            "ground_truth": "I<ARG351985821<<<<<<<<<<<<<<<\n8603278M3706277ARG<<<<<<<<<<<2\nMARTINEZ<<ENZO<<<<<<<<<<<<<<"
+            "ground_truth": "I<ARG351985821<<<<<<<<<<<<<<<<\n8603278M3706277ARG<<<<<<<<<<<2\nMARTINEZ<<ENZO<<<<<<<<<<<<<<<<"
         }
     },
     {
@@ -31,7 +31,7 @@
     },
     {
         "2311_0.png": {
-            "ground_truth": "I<ARG494909661<<<<<<<<<<<<<<<\n8405313M3205150ARG<<<<<<<<<<<8\nCORONEL<<GUADALUPE<<<<<<<<<<<"
+            "ground_truth": "I<ARG494909661<<<<<<<<<<<<<<<<\n8405313M3205150ARG<<<<<<<<<<<8\nCORONEL<<GUADALUPE<<<<<<<<<<<<"
         }
     },
     {
@@ -41,7 +41,7 @@
     },
     {
         "2331_0.png": {
-            "ground_truth": "I<ARG496203749<<<<<<<<<<<<<<<\n5712023M3404126ARG<<<<<<<<<<<0\nQUIROGA<VERA<<BAUTISTA<SANTINO"
+            "ground_truth": "I<ARG496203749<<<<<<<<<<<<<<<<\n5712023M3404126ARG<<<<<<<<<<<0\nQUIROGA<VERA<<BAUTISTA<SANTINO"
         }
     },
     {
@@ -51,12 +51,12 @@
     },
     {
         "2343_0.png": {
-            "ground_truth": "I<ARG497338822<<<<<<<<<<<<<<<\n5709065M3304020ARG<<<<<<<<<<<2\nTORRES<GARCIA<<JUAN<MARTIN<<<<"
+            "ground_truth": "I<ARG497338822<<<<<<<<<<<<<<<<\n5709065M3304020ARG<<<<<<<<<<<2\nTORRES<GARCIA<<JUAN<MARTIN<<<<"
         }
     },
     {
         "2005_0.png": {
-            "ground_truth": "I<ARG436038411<<<<<<<<<<<<<<<\n0005201F3007033ARG<<<<<<<<<<<0\nJAZMIN<SUAREZ<GARCIA<<MORA<ZOE"
+            "ground_truth": "I<ARG436038411<<<<<<<<<<<<<<<<\n0005201F3007033ARG<<<<<<<<<<<0\nJAZMIN<SUAREZ<GARCIA<<MORA<ZOE"
         }
     },
     {
@@ -71,7 +71,7 @@
     },
     {
         "2015_0.png": {
-            "ground_truth": "I<ARG364546433<<<<<<<<<<<<<<<<\n7505010F3507201ARG<<<<<<<<<<<6\nSOSA<<FRANCISCO<<<<<<<<<<<<<<"
+            "ground_truth": "I<ARG364546433<<<<<<<<<<<<<<<<\n7505010F3507201ARG<<<<<<<<<<<6\nSOSA<<FRANCISCO<<<<<<<<<<<<<<<"
         }
     },
     {
