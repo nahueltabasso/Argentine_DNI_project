@@ -36,7 +36,7 @@ Detect and localize the elements of the Argentine ID card in images.
 * *In scope:* card elements detection (multiple classes).
 * *Out of scope:* OCR, face detection, MRZ reading, etc.
 
-== *Libraries & Tools*
+=== *Libraries & Tools*
 To achieve the goal of this work, I used the following libraries:
 
 * `ultralytics`
@@ -44,13 +44,13 @@ To achieve the goal of this work, I used the following libraries:
 * `pillow`
 * `torch`
 
-=== *Reproducibility notes*
+==== *Reproducibility notes*
 
 * Download the weights from https://platform.ultralytics.com/ultralytics/yolo26/yolo26s[YOLO26S].
 * Fixed `seed=42` in `TRAIN_CFG`.
 * Weights stored at `weights/yolo/yolo26s.pt`
 
-=== *Dataset*
+==== *Dataset*
 
 Were used samples from the **dataset** of the previous stage of the project as input data for the **pre-labeling** pipeline. The annotations of the elements of the DNI were generated and a new dataset for this stage was created with the follwing classes:
 
@@ -96,12 +96,12 @@ Afterwards, the annotations of the different classes were corrected using *CVAT*
 </table>
 ++++
 
-=== Limitations & assumptions
+==== Limitations & assumptions
 
 * The test set is *small (32)*.
 * The dataset is *not public* (except the synthetic examples).
 
-== *Process Overview*
+=== *Process Overview*
 
 The dataset construction and model training were split into a sequential pipeline of four notebooks. Each notebook produces the input for the next one, following the
 naming convention `NN_<step>_vX.Y.Z.ipynb`.
@@ -244,4 +244,7 @@ Elements with larger physical area or high-contrast patterns (`picture`, `pdf_41
 === *References*
 
 * Ultralytics YOLO (OBB task) documentation.
-* Voxel51 FiftyOne / CVAT annotation tools.
+* Voxel51 FiftyOne / CVAT annotation tools.**
+
+
+== *Data Extraction from Argentine ID Cards with OCR*
