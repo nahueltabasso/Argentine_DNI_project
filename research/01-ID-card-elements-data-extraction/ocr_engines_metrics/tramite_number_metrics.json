@@ -1,0 +1,23 @@
+[
+    {
+        "Element":"Tramite Number",
+        "Engine":"EASYOCR",
+        "Exact Match (%)":69.57,
+        "Mean CER (%)":15.42,
+        "Total Samples":23
+    },
+    {
+        "Element":"Tramite Number",
+        "Engine":"TESSERACT",
+        "Exact Match (%)":73.91,
+        "Mean CER (%)":18.18,
+        "Total Samples":23
+    },
+    {
+        "Element":"Tramite Number",
+        "Engine":"PADDLEOCR",
+        "Exact Match (%)":91.3,
+        "Mean CER (%)":8.7,
+        "Total Samples":23
+    }
+]

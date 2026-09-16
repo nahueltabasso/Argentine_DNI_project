@@ -1,0 +1,23 @@
+[
+    {
+        "Element":"Address",
+        "Engine":"EASYOCR",
+        "Exact Match (%)":0.0,
+        "Mean CER (%)":37.59,
+        "Total Samples":17
+    },
+    {
+        "Element":"Address",
+        "Engine":"TESSERACT",
+        "Exact Match (%)":0.0,
+        "Mean CER (%)":38.22,
+        "Total Samples":17
+    },
+    {
+        "Element":"Address",
+        "Engine":"PADDLEOCR",
+        "Exact Match (%)":11.76,
+        "Mean CER (%)":30.45,
+        "Total Samples":17
+    }
+]

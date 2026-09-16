@@ -1,0 +1,23 @@
+[
+    {
+        "Element":"MRZ",
+        "Engine":"EASYOCR",
+        "Exact Match (%)":52.94,
+        "Mean CER (%)":1.37,
+        "Total Samples":17
+    },
+    {
+        "Element":"MRZ",
+        "Engine":"TESSERACT",
+        "Exact Match (%)":58.82,
+        "Mean CER (%)":2.61,
+        "Total Samples":17
+    },
+    {
+        "Element":"MRZ",
+        "Engine":"PADDLEOCR",
+        "Exact Match (%)":94.12,
+        "Mean CER (%)":0.07,
+        "Total Samples":17
+    }
+]
