@@ -1,117 +1,186 @@
 [
     {
         "2014_0.png": {
-            "ground_truth": "0057074323"
+            "ground_truth": "0057074323",
+            "easyocr_pred": "0057074323",
+            "tesseract_pred": "0057074323",
+            "paddleocr_pred": "0057074323"
         }
     },
     {
         "0995_0.png": {
-            "ground_truth": "00415963818"
+            "ground_truth": "00415963818",
+            "easyocr_pred": "1596361",
+            "tesseract_pred": "PEAJE",
+            "paddleocr_pred": "00415963818"
         }
     },
     {
         "2260_0.png": {
-            "ground_truth": "0078865885"
+            "ground_truth": "0078865885",
+            "easyocr_pred": "0078865885",
+            "tesseract_pred": "0078865885",
+            "paddleocr_pred": "0078865885"
         }
     },
     {
         "1103_0.png": {
-            "ground_truth": "00688475100"
+            "ground_truth": "00688475100",
+            "easyocr_pred": "00688475100",
+            "tesseract_pred": "00688475100",
+            "paddleocr_pred": "00688475100"
         }
     },
     {
         "1086_0.png": {
-            "ground_truth": "00660383959"
+            "ground_truth": "00660383959",
+            "easyocr_pred": "00660383959",
+            "tesseract_pred": "00660383959",
+            "paddleocr_pred": "00660383959"
         }
     },
     {
         "1126_0.png": {
-            "ground_truth": "00488711815"
+            "ground_truth": "00488711815",
+            "easyocr_pred": "",
+            "tesseract_pred": "AMATMAA",
+            "paddleocr_pred": ""
         }
     },
     {
         "2310_0.png": {
-            "ground_truth": "0082821473"
+            "ground_truth": "0082821473",
+            "easyocr_pred": "0082821473",
+            "tesseract_pred": "0082821473",
+            "paddleocr_pred": "0082821473"
         }
     },
     {
         "2006_0.png": {
-            "ground_truth": "0040229701"
+            "ground_truth": "0040229701",
+            "easyocr_pred": "0040229701",
+            "tesseract_pred": "0040229701",
+            "paddleocr_pred": "0040229701"
         }
     },
     {
         "2004_0.png": {
-            "ground_truth": "0067909796"
+            "ground_truth": "0067909796",
+            "easyocr_pred": "0067909796",
+            "tesseract_pred": "0067909796",
+            "paddleocr_pred": "0067909796"
         }
     },
     {
         "2342_0.png": {
-            "ground_truth": "0024336889"
+            "ground_truth": "0024336889",
+            "easyocr_pred": "0024336889",
+            "tesseract_pred": "0024336889",
+            "paddleocr_pred": "0024336889"
         }
     },
     {
         "1069_0.png": {
-            "ground_truth": "00419484083"
+            "ground_truth": "00419484083",
+            "easyocr_pred": "00419484083",
+            "tesseract_pred": "00419484083",
+            "paddleocr_pred": "00419484083"
         }
     },
     {
         "2150_0.png": {
-            "ground_truth": "0066333294"
+            "ground_truth": "0066333294",
+            "easyocr_pred": "0066333294",
+            "tesseract_pred": "0066333294",
+            "paddleocr_pred": "0066333294"
         }
     },
     {
         "2330_0.png": {
-            "ground_truth": "0090881796"
+            "ground_truth": "0090881796",
+            "easyocr_pred": "0090881796",
+            "tesseract_pred": "0090881796",
+            "paddleocr_pred": "0090881796"
         }
     },
     {
         "0986_0.png": {
-            "ground_truth": "00488711815"
+            "ground_truth": "00488711815",
+            "easyocr_pred": "",
+            "tesseract_pred": "AMATMAA",
+            "paddleocr_pred": ""
         }
     },
     {
         "1115_0.png": {
-            "ground_truth": "00573655751"
+            "ground_truth": "00573655751",
+            "easyocr_pred": "C0s73885751",
+            "tesseract_pred": "00673445751",
+            "paddleocr_pred": "00573655751"
         }
     },
     {
         "2314_0.png": {
-            "ground_truth": "0061611228"
+            "ground_truth": "0061611228",
+            "easyocr_pred": "0061611228",
+            "tesseract_pred": "0061611228",
+            "paddleocr_pred": "0061611228"
         }
     },
     {
         "2024_0.png": {
-            "ground_truth": "0068994661"
+            "ground_truth": "0068994661",
+            "easyocr_pred": "0068994661",
+            "tesseract_pred": "0068994661",
+            "paddleocr_pred": "0068994661"
         }
     },
     {
         "1054_0.png": {
-            "ground_truth": "00339293035"
+            "ground_truth": "00339293035",
+            "easyocr_pred": "00890293086",
+            "tesseract_pred": "00410293035",
+            "paddleocr_pred": "00339293035"
         }
     },
     {
         "2086_0.png": {
-            "ground_truth": "0063738623"
+            "ground_truth": "0063738623",
+            "easyocr_pred": "0063738623",
+            "tesseract_pred": "0063738623",
+            "paddleocr_pred": "0063738623"
         }
     },
     {
         "3008_0.png": {
-            "ground_truth": "00175208177"
+            "ground_truth": "00175208177",
+            "easyocr_pred": "001f5208177",
+            "tesseract_pred": "DOWE2OB177",
+            "paddleocr_pred": "00175208177"
         }
     },
     {
         "1004_0.png": {
-            "ground_truth": "00690509432"
+            "ground_truth": "00690509432",
+            "easyocr_pred": "00680509232",
+            "tesseract_pred": "00690509432",
+            "paddleocr_pred": "00690509432"
         }
     },
     {
         "2158_0.png": {
-            "ground_truth": "0067271744"
+            "ground_truth": "0067271744",
+            "easyocr_pred": "0067271744",
+            "tesseract_pred": "0067271744",
+            "paddleocr_pred": "0067271744"
         }
     },
     {
         "3020_0.png": {
-            "ground_truth": "00557962409"
+            "ground_truth": "00557962409",
+            "easyocr_pred": "00557962409",
+            "tesseract_pred": "00557962409",
+            "paddleocr_pred": "00557962409"
         }
     }
 ]

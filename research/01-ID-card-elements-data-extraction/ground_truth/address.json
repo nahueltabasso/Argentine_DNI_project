@@ -1,62 +1,98 @@
 [
     {
         "1029_0.png": {
-            "ground_truth": "AV ENTRE RIOS 1161 1° D - CIUDAD AUTONOMA DE BS AS - COMUNA 3"
+            "ground_truth": "AV ENTRE RIOS 1161 1° D - CIUDAD AUTONOMA DE BS AS - COMUNA 3",
+            "easyocr_pred": "5E gs  AVcENTRE RiOS AS 1161 1 D UGAR DE 3 CiUDAD ECHA DE WNGRESEN VENEZUELA DOMICIL COMUNA AUTONOMA NACWAENTO",
+            "tesseract_pred": "    A A a  ÓMICALIO- AY ENTRE RIOS 161 1D. CIUDAD AUTONOMA   USAR Co do zu a  -UGAR DE . A.   ECHA DE ore, VE q el   y E 7 yo",
+            "paddleocr_pred": "DOMICILIO AV ENTRE RIOS 1161 1° D-CIUDAD AUTONOMA DE BS AS-COMUNA 3 UGAR DE NACIMIENTO: VENEZUELA ECHA DE INGRESOAERAIS"
         }
     },
     {
         "2327_0.png": {
-            "ground_truth": "AV. J.B. ALBERDI N° 635 - CÓRDOBA 5000, CÓRDOBA"
+            "ground_truth": "AV. J.B. ALBERDI N° 635 - CÓRDOBA 5000, CÓRDOBA",
+            "easyocr_pred": "AV JB ALBERDI N' 635 CORDOBA 5000, CORDOBA",
+            "tesseract_pred": "    AV, .8,ALBERDI_N* 635 - CORDOBA 5000, CORDOBA",
+            "paddleocr_pred": "AV.J.B.ALBERDIN°635-CORDOBA5000,CORDOBA"
         }
     },
     {
         "2085_0.png": {
-            "ground_truth": "CALLE 1 N° 19 - SAN JUAN 5400, SAN JUAN"
+            "ground_truth": "CALLE 1 N° 19 - SAN JUAN 5400, SAN JUAN",
+            "easyocr_pred": "CALLE N' 19 SAN JUAN SA00, SAN JUAN",
+            "tesseract_pred": "    CALLE A. H*.19- SAN JUAN 5400, SAN JUAN",
+            "paddleocr_pred": "CALLE 1N°19-SAN JUAN 5400, SAN JUAN"
         }
     },
     {
         "2257_0.png": {
-            "ground_truth": "BOULEVARD CHACO N° 64 - SAN MIGUEL DE TUCUMÁN 4000, TUCUMÁN"
+            "ground_truth": "BOULEVARD CHACO N° 64 - SAN MIGUEL DE TUCUMÁN 4000, TUCUMÁN",
+            "easyocr_pred": "OULEVARD CHACO N' 64 SAN MIGUEL DE TUCUMAN 4000, TUCUMAN",
+            "tesseract_pred": "    JOULEVARO CHACO H* 64 - SAN MIGUEL DE TUCUMÁN 4000, TUCUMÁN",
+            "paddleocr_pred": "BOULEVARD CHACO N° 64 - SAN MIGUEL DE TUCUMÁN 4000, TUCUMÁN"
         }
     },
     {
         "2157_0.png": {
-            "ground_truth": "AVENIDA 4 N° 2447 - PARANÁ 3100, ENTRE RÍOS"
+            "ground_truth": "AVENIDA 4 N° 2447 - PARANÁ 3100, ENTRE RÍOS",
+            "easyocr_pred": "AVENIDA 4 N? 2447 PARANA 3100, ENTRE RIOS",
+            "tesseract_pred": "    AVENIDA 4 N'2447 - PARANA 3100, ENTRE RIOS",
+            "paddleocr_pred": "AVENIDA4 N2447-PARANA 3100, ENTRE RIOS"
         }
     },
     {
         "2255_0.png": {
-            "ground_truth": "BOULEVARD ALEM N° 124 PISO 6 DTO. 7 - SANTA FE 3000, SANTA FE"
+            "ground_truth": "BOULEVARD ALEM N° 124 PISO 6 DTO. 7 - SANTA FE 3000, SANTA FE",
+            "easyocr_pred": "BOULEVARD ALEM N' 124 PISO 6 DTO. 7 SANTAFE 3000 SANIAFE",
+            "tesseract_pred": "    3OULEVARD ALEM N* 124 PISO 6 DTO. 7 - SANTAFE 3000, SANTAFE",
+            "paddleocr_pred": "BOULEVARD ALEM N° 124 PISO 6 DTO.7- SANTA FE 3000, SANTAFE"
         }
     },
     {
         "2311_0.png": {
-            "ground_truth": "AVENIDA BELGRANO N° 727 OFICINA 20 - RÍO GALLEGOS 9400, SANTA CRUZ"
+            "ground_truth": "AVENIDA BELGRANO N° 727 OFICINA 20 - RÍO GALLEGOS 9400, SANTA CRUZ",
+            "easyocr_pred": "IVENIDA BELGRANO N 727 OFICINA 20 RIO GALLEGOS 9400, SANTA CRUZ",
+            "tesseract_pred": "    VENIDA BELGRANO N* 727 OFICINA 20 - RIO GALLEGOS 9400, SANTA CRUZ",
+            "paddleocr_pred": "AVENIDA BELGRANO N° 727 OFICINA 20 - RÍO GALLEGOS 9400, SANTA CRUZ"
         }
     },
     {
         "1070_0.png": {
-            "ground_truth": "CHACO"
+            "ground_truth": "CHACO",
+            "easyocr_pred": "",
+            "tesseract_pred": "    NN NN NN.",
+            "paddleocr_pred": ""
         }
     },
     {
         "2331_0.png": {
-            "ground_truth": "DIAG. CHUBUT N° 6437 - SANTA FE 3000, SANTA FE"
+            "ground_truth": "DIAG. CHUBUT N° 6437 - SANTA FE 3000, SANTA FE",
+            "easyocr_pred": "DIAG. CHUBUT N? 6437 SANTAFE 3000 SANTA FE",
+            "tesseract_pred": "    DIAG. CHUBUT N' 6437 - SANTA FE 3000, SANTA FE",
+            "paddleocr_pred": "DIAG.CHUBUTN°6437-SANTAFE 3000,SANTAFE"
         }
     },
     {
         "1112_0.png": {
-            "ground_truth": "SARAZA 1102 1 A - PARQUE CHACABUCO - CIUDAD DE BUENOS AIRES - CIUDAD DE BUENOS AIRES"
+            "ground_truth": "SARAZA 1102 1 A - PARQUE CHACABUCO - CIUDAD DE BUENOS AIRES - CIUDAD DE BUENOS AIRES",
+            "easyocr_pred": "SARAZA 1102 1 A PARQUE CHACeuco",
+            "tesseract_pred": "    SARAZA 1102 1 A - PARQUE CHACÉBUGO -",
+            "paddleocr_pred": "SARAZA 1102 1 A - PARQUE CHACABUCO -"
         }
     },
     {
         "2343_0.png": {
-            "ground_truth": "DIAGONAL 2 N° 26 - POSADAS 3300, MISIONES"
+            "ground_truth": "DIAGONAL 2 N° 26 - POSADAS 3300, MISIONES",
+            "easyocr_pred": "DIAGONAL 2 N 26 POSADAS 3300, MISIONES",
+            "tesseract_pred": "    DIAGONAL 2. N” 26 - POSADAS 3300, MISIONES",
+            "paddleocr_pred": "DIAGONAL 2 N° 26-POSADAS 3300, MISIONES"
         }
     },
     {
         "2005_0.png": {
-            "ground_truth": "AVENIDA CÓRDOBA N° 48 PISO 9 DTO. 6 - SAN FERANDO DEL VALLE DE CATAM"
+            "ground_truth": "AVENIDA CÓRDOBA N° 48 PISO 9 DTO. 6 - SAN FERANDO DEL VALLE DE CATAM",
+            "easyocr_pred": "AVENIDA CORDOBA N 48 PISO 9 DTO. 6 SAN FERANDO DEL VALLEDE CaTAM",
+            "tesseract_pred": "    AVENIDA CORDQBA N* 48 PISO 9 DTO. 6 - SAN FERANDO DEL VALLE DE CATAM",
+            "paddleocr_pred": "AVENIDA CÓRDQBA N° 48 PISO 9 DTO. 6 - SAN FERANDO DEL VALLE DE CATAM"
         }
     },
     {
@@ -66,22 +102,34 @@
     },
     {
         "3021_0.png": {
-            "ground_truth": "PJE JUAN JOSE VALLE 3480 - ROSARIO - ROSARIO - SANTA FE"
+            "ground_truth": "PJE JUAN JOSE VALLE 3480 - ROSARIO - ROSARIO - SANTA FE",
+            "easyocr_pred": "IE JuaN JOSE VALLE 3480 ROSARIO",
+            "tesseract_pred": "    PIE JUAN JOSE VALLE 3480 - ROSARIO -",
+            "paddleocr_pred": "PJE JUAN JOSE VALLE 3480 - ROSARIO"
         }
     },
     {
         "2015_0.png": {
-            "ground_truth": "AVENIDA CORRIENTES N° 94 TORRE 5 DTO. 1 - MENDOZA 5500, MENDOZA"
+            "ground_truth": "AVENIDA CORRIENTES N° 94 TORRE 5 DTO. 1 - MENDOZA 5500, MENDOZA",
+            "easyocr_pred": "IVENIDA CORRIENTES N 94 TORRE 5 DTO 1 MENDOZA 5500 MENDOZA",
+            "tesseract_pred": "    AVENIDA CORRIENTES N* 94 TORRE 5 DTO. 1 - MENDOZA 5500, MENDOZA",
+            "paddleocr_pred": "AVENIDA CORRIENTES N° 94 TORRE 5 DTO. 1- MENDOZA 5500, MENDOZA"
         }
     },
     {
         "1096_0.png": {
-            "ground_truth": "GUERCHUNOFF 584 - GLEW - ALMIRANTE BROWN BUENOS AIRES"
+            "ground_truth": "GUERCHUNOFF 584 - GLEW - ALMIRANTE BROWN BUENOS AIRES",
+            "easyocr_pred": "Vo C Guea Alrante Brown",
+            "tesseract_pred": "    ELLERISALNOTF 4244. GLEW + ALU-RANTE EROVM",
+            "paddleocr_pred": "GUERCHUNOFF 584-GLEW-ALMIRANTE BROWN"
         }
     },
     {
         "2003_0.png": {
-            "ground_truth": "CALLE 2 N° 532 DTO. 9 - LA PLATA 1900, BUENOS AIRES"
+            "ground_truth": "CALLE 2 N° 532 DTO. 9 - LA PLATA 1900, BUENOS AIRES",
+            "easyocr_pred": "CALLE 2N 532 DTO 9 LA PLATA 1900, BUENOS AIRES",
+            "tesseract_pred": "    CALLE 2N\" 932 QTO. 9 - LA PLATA 1900, BUENOS AIRES",
+            "paddleocr_pred": "CALLE 2 N° 532 DTO. 9-LA PLATA 1900, BUENOS AIRES"
         }
     }
 ]

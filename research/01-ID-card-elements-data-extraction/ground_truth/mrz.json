@@ -1,87 +1,138 @@
 [
     {
         "1029_0.png": {
-            "ground_truth": "IDARG95833029<7<<<<<<<<<<<<<<<\n9206126F2004127VEN<<<<<<<<<<<2\nGONZALEZ<<CLAUDIA<ELENA<<<<<<<"
+            "ground_truth": "IDARG95833029<7<<<<<<<<<<<<<<<\n9206126F2004127VEN<<<<<<<<<<<2\nGONZALEZ<<CLAUDIA<ELENA<<<<<<<",
+            "easyocr_pred": "J 2aRG95833029<7<<<<<<<<<<<<<<< 9206126F2004127VEN<<<<<<<<<<<Z GONZALEZ<<CLAUDIA<ELENA<<<<<<<",
+            "tesseract_pred": "IDARG9I5833029<7<<<<<<<<<<<<<c<9206126F2004127VEN<<<<<<<<<<<2GONZALEZ<SCLAUDIA<ELENA<<<<<<<",
+            "paddleocr_pred": "IDARG95833029<7<<<<<<<<<<<<<<<\n9206126F2004127VEN<<<<<<<<<<<2\nGONZALEZ<<CLAUDIA<ELENA<<<<<<<"
         }
     },
     {
         "2327_0.png": {
-            "ground_truth": "I<ARG195025194<<<<<<<<<<<<<<<<\n7508228F3207110ARG<<<<<<<<<<<2\nLUNA<<THIAGO<BRAVO<<<<<<<<<<<<"
+            "ground_truth": "I<ARG195025194<<<<<<<<<<<<<<<<\n7508228F3207110ARG<<<<<<<<<<<2\nLUNA<<THIAGO<BRAVO<<<<<<<<<<<<",
+            "easyocr_pred": "I<ARG195025194<<<<<<<<<<<<<<<< 7508228F3207110ARG<<<<<<<<<<<2 LUNA<<THIAGO<BRAV0<<<<<<<<<<<<",
+            "tesseract_pred": "I<ARG195025194<<<<<<<<<<<<<<<<7508228F3207110ARG<<<<<<<<<<<2LUNA<<THIAGO<BRAVO<<<<<<<<<<<<",
+            "paddleocr_pred": "I<ARG195025194<<<<<<<<<<<<<<<<\n7508228F3207110ARG<<<<<<<<<<<2\nLUNA<<THIAGO<BRAVO<<<<<<<<<<<<"
         }
     },
     {
         "2085_0.png": {
-            "ground_truth": "I<ARG264447692<<<<<<<<<<<<<<<<\n5012192M3410130ARG<<<<<<<<<<<2\nVALDEZ<<GERONIMO<ROMERO<<<<<<<"
+            "ground_truth": "I<ARG264447692<<<<<<<<<<<<<<<<\n5012192M3410130ARG<<<<<<<<<<<2\nVALDEZ<<GERONIMO<ROMERO<<<<<<<",
+            "easyocr_pred": "I<ARG264447692<<<<<<<<<<<<<<<< 5012192M34 10130ARG<<<<<<<<<<<2 VALDEZ<<GERONIMO<ROMERO<<<<<<<",
+            "tesseract_pred": "I<ARG264447692<<<<<<<<<<<<<<<<5012192M3410130ARG<<<<<<<<<<<2VALDEZ<<GERONIMO<ROMERO<<<<<<<",
+            "paddleocr_pred": "I<ARG264447692<<<<<<<<<<<<<<<<\n5012192M3410130ARG<<<<<<<<<<<2\nVALDEZ<<GERONIMO<ROMERO<<<<<<<"
         }
     },
     {
         "2257_0.png": {
-            "ground_truth": "I<ARG187463968<<<<<<<<<<<<<<<<\n0206307F3411045ARG<<<<<<<<<<<8\nFERNANDEZ<<PEDRO<<<<<<<<<<<<<<"
+            "ground_truth": "I<ARG187463968<<<<<<<<<<<<<<<<\n0206307F3411045ARG<<<<<<<<<<<8\nFERNANDEZ<<PEDRO<<<<<<<<<<<<<<",
+            "easyocr_pred": "I<ARG187463968<<<<<<<<<<<<<<<< 0206307F3411045ARG<<<<<<<<<<<8 FERNANDEZ<<PEDRO<<<<<<<<<<<<<<",
+            "tesseract_pred": "I<ARG187463968<<<<<<<<<<<<<<<<0206307F3411045ARG<<<<<<<<<<<8FERNANDEZ<<PEDRO<<<<<<<<<<<<<<",
+            "paddleocr_pred": "I<ARG187463968<<<<<<<<<<<<<<<<\n0206307F3411045ARG<<<<<<<<<<<8\nFERNANDEZ<<PEDRO<<<<<<<<<<<<<<"
         }
     },
     {
         "2157_0.png": {
-            "ground_truth": "I<ARG351985821<<<<<<<<<<<<<<<<\n8603278M3706277ARG<<<<<<<<<<<2\nMARTINEZ<<ENZO<<<<<<<<<<<<<<<<"
+            "ground_truth": "I<ARG351985821<<<<<<<<<<<<<<<<\n8603278M3706277ARG<<<<<<<<<<<2\nMARTINEZ<<ENZO<<<<<<<<<<<<<<<<",
+            "easyocr_pred": "I<ARG351985821<<<<<<<<<<<<<<<< 8603278M3706277ARG<<<<<<<<<<<2 MARTINEZ<<ENZO<<<<<<<<<<<<<<<<",
+            "tesseract_pred": "I<ARG351985821<<<<<<<<<<<<<<<<8603278M3706277ARG<<<<<<<<<<<2MARTINEZ<<ENZO<<<<<<<<<<<<<<<<",
+            "paddleocr_pred": "I<ARG351985821<<<<<<<<<<<<<<<<\n8603278M3706277ARG<<<<<<<<<<<2\nMARTINEZ<<ENZ0<<<<<<<<<<<<<<<<"
         }
     },
     {
         "2255_0.png": {
-            "ground_truth": "I<ARG285685334<<<<<<<<<<<<<<<<\n8311298M3010220ARG<<<<<<<<<<<4\nMORALES<<THIAGO<MATEO<<<<<<<<<"
+            "ground_truth": "I<ARG285685334<<<<<<<<<<<<<<<<\n8311298M3010220ARG<<<<<<<<<<<4\nMORALES<<THIAGO<MATEO<<<<<<<<<",
+            "easyocr_pred": "I<ARG285685334<<<<<<<<<<<<<<<< 8311298M3010220ARG<<<<<<<<<<<4 MORALES<<THIAGO<MATEO<<<<<<<<<",
+            "tesseract_pred": "I<ARG285685334<<<<<<<<<<<<<<<<8311298M3010220ARG<<<<<<<<<<<4MORALES<<THIAGO<MATEO<<<<<<<<<",
+            "paddleocr_pred": "I<ARG285685334<<<<<<<<<<<<<<<<\n8311298M3010220ARG<<<<<<<<<<<4\nMORALES<<THIAGO<MATEO<<<<<<<<<"
         }
     },
     {
         "2311_0.png": {
-            "ground_truth": "I<ARG494909661<<<<<<<<<<<<<<<<\n8405313M3205150ARG<<<<<<<<<<<8\nCORONEL<<GUADALUPE<<<<<<<<<<<<"
+            "ground_truth": "I<ARG494909661<<<<<<<<<<<<<<<<\n8405313M3205150ARG<<<<<<<<<<<8\nCORONEL<<GUADALUPE<<<<<<<<<<<<",
+            "easyocr_pred": "I<ARG494909661<<<<<<<<<<<<<<<< 8405313M3205150ARG<<<<<<<<<<<8 CORONEL<<GUADALUPE<<<<<<<<<<<<",
+            "tesseract_pred": "I<ARG494909661<<<<<<<<<<<<<<<<8405313M3205150ARG<<<<<<<<<<<8CORONEL<<GUADALUPE<<<<<<<<<<<<",
+            "paddleocr_pred": "I<ARG494909661<<<<<<<<<<<<<<<<\n8405313M3205150ARG<<<<<<<<<<<8\nCORONEL<<GUADALUPE<<<<<<<<<<<<"
         }
     },
     {
         "1070_0.png": {
-            "ground_truth": "IDARG47227075<0<<<<<<<<<<<<<<<\n0603272M2103271ARG<<<<<<<<<<<0\nBONZON<SCHREIBER<<IAN<GUSTAVO<"
+            "ground_truth": "IDARG47227075<0<<<<<<<<<<<<<<<\n0603272M2103271ARG<<<<<<<<<<<0\nBONZON<SCHREIBER<<IAN<GUSTAVO<",
+            "easyocr_pred": "IdARG47227075<0<<<<<<<<<<<<<<< 0603272M2103271ARG<<<<<k<k<<<O BONZON<SCHREIBER<<IAN<GUSTAVo<",
+            "tesseract_pred": "IDARG47227075<0<<<<<<<<<<<<<<<0603272M2103271ARG<<<<<<<<<<<0BONZON<SCHREIBER<<IAN<GUSTAVOS<",
+            "paddleocr_pred": "IDARG47227075<0<<<<<<<<<<<<<<<\n0603272M2103271ARG<<<<<<<<<<<0\nBONZON<SCHREIBER<<IAN<GUSTAVO<"
         }
     },
     {
         "2331_0.png": {
-            "ground_truth": "I<ARG496203749<<<<<<<<<<<<<<<<\n5712023M3404126ARG<<<<<<<<<<<0\nQUIROGA<VERA<<BAUTISTA<SANTINO"
+            "ground_truth": "I<ARG496203749<<<<<<<<<<<<<<<<\n5712023M3404126ARG<<<<<<<<<<<0\nQUIROGA<VERA<<BAUTISTA<SANTINO",
+            "easyocr_pred": "I<ARG496203749<<<<<<<<<<<<<<<< 5712023M3404126ARG<<<<<<<<<<<0 QUIROGA<VERA<<BAUTISTA<SANTINo",
+            "tesseract_pred": "I<ARG496203749<<<<<<<<<<<<<<<<5712023M3404126ARG<<<<<<<<<<<0QUIROGA<VERA<<BAUTISTA<SANTINO",
+            "paddleocr_pred": "I<ARG496203749<<<<<<<<<<<<<<<<\n5712023M3404126ARG<<<<<<<<<<<0\nQUIROGA<VERA<<BAUTISTA<SANTINO"
         }
     },
     {
         "1112_0.png": {
-            "ground_truth": "IDARG95756726<7<<<<<<<<<<<<<<<\n7907234M3705100VEN<<<<<<<<<<<6\nFONSECA<NUNXXEZ<<HEIMY<JESUS<<"
+            "ground_truth": "IDARG95756726<7<<<<<<<<<<<<<<<\n7907234M3705100VEN<<<<<<<<<<<6\nFONSECA<NUNXXEZ<<HEIMY<JESUS<<",
+            "easyocr_pred": "IDARG95756726<7<<<<<<<<<<<<<<< 7907234M3705100VEn<<<<<<<<<<<6 FONSECA<NUNXXEZ<<HEIMY<JESUS<<",
+            "tesseract_pred": "IDARG9I5756726<7<<<<<<<<<<<<<<<71907234M3705100VEN<<<<<<<<<<<6FONSECA<NUNXXEZ<<HEIMY<JESUS<<",
+            "paddleocr_pred": "IDARG95756726<7<<<<<<<<<<<<<<<\n7907234M3705100VEN<<<<<<<<<<<6\nFONSECA<NUNXXEZ<<HEIMY<JESUS<<"
         }
     },
     {
         "2343_0.png": {
-            "ground_truth": "I<ARG497338822<<<<<<<<<<<<<<<<\n5709065M3304020ARG<<<<<<<<<<<2\nTORRES<GARCIA<<JUAN<MARTIN<<<<"
+            "ground_truth": "I<ARG497338822<<<<<<<<<<<<<<<<\n5709065M3304020ARG<<<<<<<<<<<2\nTORRES<GARCIA<<JUAN<MARTIN<<<<",
+            "easyocr_pred": "I<ARG497338822<<<<<<<<<<<<<<<< 5709065M3304020ARG<<<<<<<<<<<2 TORRES<GARCIA<<JUAN<MARTIN<<<<",
+            "tesseract_pred": "I<ARG497338822<<<<<<<<<<<<<<<<5709065M3304020ARG<<<<<<<<<<<2TORRES<GARCIA<<JUAN<MARTIN<<<<",
+            "paddleocr_pred": "I<ARG497338822<<<<<<<<<<<<<<<<\n5709065M3304020ARG<<<<<<<<<<<2\nTORRES<GARCIA<<JUAN<MARTIN<<<<"
         }
     },
     {
         "2005_0.png": {
-            "ground_truth": "I<ARG436038411<<<<<<<<<<<<<<<<\n0005201F3007033ARG<<<<<<<<<<<0\nJAZMIN<SUAREZ<GARCIA<<MORA<ZOE"
+            "ground_truth": "I<ARG436038411<<<<<<<<<<<<<<<<\n0005201F3007033ARG<<<<<<<<<<<0\nJAZMIN<SUAREZ<GARCIA<<MORA<ZOE",
+            "easyocr_pred": "I<ARG436038411<<<<<<<<<<<<<<<< 0005201F3007033ARG<<<<<<<<<<<0 JAZMIN<SUAREZ<GARCIA<<MORA<ZOE",
+            "tesseract_pred": "I<ARG436038411<<<<<<<<<<<<<<<<0005201F3007033ARG<<<<<<<<<<<0JAZMIN<SUAREZ<GARCIA<<MORA<ZOE",
+            "paddleocr_pred": "I<ARG436038411<<<<<<<<<<<<<<<<\n0005201F3007033ARG<<<<<<<<<<<0\nJAZMIN<SUAREZ<GARCIA<<MORA<ZOE"
         }
     },
     {
         "0997_0.png": {
-            "ground_truth": "IDARG30651602<7<<<<<<<<<<<<<<<\n8310062M3209055ARG<<<<<<<<<<<4\nSUAREZ<<MARTIN<ARIEL<<<<<<<<<<"
+            "ground_truth": "IDARG30651602<7<<<<<<<<<<<<<<<\n8310062M3209055ARG<<<<<<<<<<<4\nSUAREZ<<MARTIN<ARIEL<<<<<<<<<<",
+            "easyocr_pred": "ID ARG30651602<7<<< < < < < < < < < < < < < 8310062M3209055A R G < < < < < < < < < < < 4 SUAREZ < <MARTIN<ARIEL<<< < < < < < < <",
+            "tesseract_pred": "IDARG30651602<7<<<<<<<<<<<<<<<8310062M3209055ARG<<<<<<<<<<<4SUAREZ<<MARTINS<ARIEL<<<<<<<<<<",
+            "paddleocr_pred": "IDARG30651602<7<<<<<<<<<<<<<<<\n8310062M3209055ARG<<<<<<<<<<<4\nSUAREZ<<MARTIN<ARIEL<<<<<<<<<<"
         }
     },
     {
         "3021_0.png": {
-            "ground_truth": "IDARG16985312<1<<<<<<<<<<<<<<<\n6411149M3308039ARG<<<<<<<<<<<6\nTABASSO<<OSVALDO<ADRIAN<<<<<<<"
+            "ground_truth": "IDARG16985312<1<<<<<<<<<<<<<<<\n6411149M3308039ARG<<<<<<<<<<<6\nTABASSO<<OSVALDO<ADRIAN<<<<<<<",
+            "easyocr_pred": "IDARG16985312<1<<<<<<<<<<<<<<< 6411149M3308039ARG <<< < < < < < < < <6 TABA S SO <<0SVAL Do<A D RIAN<<<< < < <",
+            "tesseract_pred": "IDARG16985312<1<<<<<<<<<<<<<<<6411149M3308039ARG<<<<<<<<<<<\u00d3TABASSO<<OSVALDO<ADRIAN<<<<<<<",
+            "paddleocr_pred": "IDARG16985312<1<<<<<<<<<<<<<<<\n6411149M3308039ARG<<<<<<<<<<<6\nTABASSO<<OSVALDO<ADRIAN<<<<<<<"
         }
     },
     {
         "2015_0.png": {
-            "ground_truth": "I<ARG364546433<<<<<<<<<<<<<<<<\n7505010F3507201ARG<<<<<<<<<<<6\nSOSA<<FRANCISCO<<<<<<<<<<<<<<<"
+            "ground_truth": "I<ARG364546433<<<<<<<<<<<<<<<<\n7505010F3507201ARG<<<<<<<<<<<6\nSOSA<<FRANCISCO<<<<<<<<<<<<<<<",
+            "easyocr_pred": "I<ARG364546433<<<<<<<<<<<<<<<< 7505010F3507201ARG<<<<<<<<<<<6 SOSA<<FRANCISco<<<<<<<<<<<<<<<",
+            "tesseract_pred": "I<ARG364546433<<<<<<<<<<<<<<<<7505010F3507201ARG<<<<<<<<<<<6SOSA<<FRANCISCO<<<<<<<<<<<<<<<",
+            "paddleocr_pred": "I<ARG364546433<<<<<<<<<<<<<<<<\n7505010F3507201ARG<<<<<<<<<<<6\nSOSA<<FRANCISCO<<<<<<<<<<<<<<<"
         }
     },
     {
         "1096_0.png": {
-            "ground_truth": "IDARG28121084<4<<<<<<<<<<<<<<<\n8004288M2811154ARG<<<<<<<<<<<8\nCUBILLA<<DIEGO<NICOLAS<<<<<<<<"
+            "ground_truth": "IDARG28121084<4<<<<<<<<<<<<<<<\n8004288M2811154ARG<<<<<<<<<<<8\nCUBILLA<<DIEGO<NICOLAS<<<<<<<<",
+            "easyocr_pred": "[daRg28121084<4<<<<<<<<<<<<<<< 8004288M2811154ARG<<<<<<<<<<<8 [UBILLA<<DIEGO<NICOLAS<<<<<<<<",
+            "tesseract_pred": "108B4<4<<<<<<<<<<<<<<<115LARG<<<<<<<<<<<8BIEGO<NICOLAS<<<<<<<<",
+            "paddleocr_pred": "IDARG28121084<4<<<<<<<<<<<<<<<\n8004288M2811154ARG<<<<<<<<<<<8\nCUBILLA<<DIEGO<NICOLAS<<<<<<<<"
         }
     },
     {
         "2003_0.png": {
-            "ground_truth": "I<ARG331969344<<<<<<<<<<<<<<<<\n0306182F3702143ARG<<<<<<<<<<<4\nLOPEZ<<RENATA<<<<<<<<<<<<<<<<<"
+            "ground_truth": "I<ARG331969344<<<<<<<<<<<<<<<<\n0306182F3702143ARG<<<<<<<<<<<4\nLOPEZ<<RENATA<<<<<<<<<<<<<<<<<",
+            "easyocr_pred": "I<ARG331969344<<<<<<<<<<<<<<<< 0306182F3702143ARG<<<<<<<<<<<4 LOPEZ<<RENATA<<<<<<<<<<<<<<<<<",
+            "tesseract_pred": "1<ARG331969344<<<<<<<<<<<<<<<<0306182F3702143ARG<<<<<<<<<<<4LOPEZ<<RENATA<<<<<<<<<<<<<<<<<",
+            "paddleocr_pred": "I<ARG331969344<<<<<<<<<<<<<<<<\n0306182F3702143ARG<<<<<<<<<<<4\nLOPEZ<<RENATA<<<<<<<<<<<<<<<<<"
         }
     }
 ]
