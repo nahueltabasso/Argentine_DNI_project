@@ -1,7 +1,7 @@
 = *Argentine ID Card Elements Detection and Data Extraction Report*
 
 :author: Nahuel
-:revnumber: 1.0.0
+:revnumber: 2.0.0
 :revdate: 2026-09-04
 :toc: left
 :toclevels: 3
@@ -44,13 +44,13 @@ To achieve the goal of this work, I used the following libraries:
 * `pillow`
 * `torch`
 
-==== *Reproducibility notes*
+=== *Reproducibility notes*
 
 * Download the weights from https://platform.ultralytics.com/ultralytics/yolo26/yolo26s[YOLO26S].
 * Fixed `seed=42` in `TRAIN_CFG`.
 * Weights stored at `weights/yolo/yolo26s.pt`
 
-==== *Dataset*
+=== *Dataset*
 
 Were used samples from the **dataset** of the previous stage of the project as input data for the **pre-labeling** pipeline. The annotations of the elements of the DNI were generated and a new dataset for this stage was created with the follwing classes:
 
@@ -244,7 +244,138 @@ Elements with larger physical area or high-contrast patterns (`picture`, `pdf_41
 === *References*
 
 * Ultralytics YOLO (OBB task) documentation.
-* Voxel51 FiftyOne / CVAT annotation tools.**
+* Ultralytics YOLOv26 model documentation.
+* Voxel51 FiftyOne / CVAT annotation tools.
 
 
 == *Data Extraction from Argentine ID Cards with OCR*
+
+=== *Introduction*
+
+In this stage, the goal is to extract the data from the elements of the Argentine ID-Card (DNI) using OCR techniques. The elements of the DNI are detected and cropped with the YOLOv26 model trained for that task. Then, the cropped images are processed with different OCR engines to extract the text.
+After that, the results of the OCR engines are compared with the ground truth data to evaluate their performance.
+
+The OCR engines included in this benchmark are: `EasyOCR`, `PaddleOCR` and `Tesseract OCR`. The evaluation metrics are: *Levenshtein distance*, *Character Error Rate (CER)*.
+
+=== *Problem Statement*
+* Extract the data from the elements of the Argentine ID card (DNI) in images.
+
+=== *Success Criteria*
+
+* Select the best OCR engine to extract the data from the elements of the Argentine ID card (DNI) in images.
+
+=== *Scope*
+
+* *In scope:* OCR engines evaluation and benchmarking.
+* *Out of scope:* OCR engines training, fine-tuning or development.
+
+=== *Libraries & Tools*
+
+* `easyocr`
+* `pytesseract`
+* `paddleocr`
+* `paddlepaddle`
+* `levenshtein`
+
+=== *Dataset*
+
+Before running the benchmark, built the dataset of the elements of the Argentines ID-Cards (Only the elements that contain text). To built this dataset we take 40 examples of *DNIs* (23 samples of *front* and 17 samples of *back*).
+
+Then we run the **YOLOv26 Model** and crop the elements of the DNI. After that
+we generate a `pre_ground_truth` using a VLM (Vision Language Model) to extract the text from the elements of the DNI. Finally, we manually correct the `pre_ground_truth` to generate the final `ground_truth` dataset.
+
+[source, json]
+----
+{
+  "ground_truth":"I<ARG497338822<<<<<<<<<<<<<<<<\n5709065M3304020ARG<<<<<<<<<<<2\nTORRES<GARCIA<<JUAN<MARTIN<<<<"
+}
+----
+
+The final dataset is stored in the `ground_truth` folder and contains the following files:
+
+* `doc_number.json`: contains the ground truth of the document number.
+* `tramite_number.json`: contains the ground truth of the tramite number.
+* `mrz.json`: contains the ground truth of the MRZ (Machine Readable Zone).
+* `address.json`: contains the ground truth of the address.
+
+==== *Process Overview*
+
+[cols="1,3,3,3", options="header"]
+|===
+| # | Notebook | Goal | Output
+| 00
+| `04_extract_elements`
+| Extract the elements of the Argentine ID Card from images with our trained YOLOv26 model.
+| Extracted elements of Argentine ID cards.
+|===
+
+=== *Evaluation protocol*
+
+Process and save the results of the OCR engines in a `json` file. Then, compare the results with the ground truth data to evaluate the performance of the OCR engines.
+
+=== *Benchmark Results*
+ 
+==== *Document Number*
+
+[cols="1,2,2,2,1", options="header"]
+|===
+|Element | OCR Engine | Mean CER (%) | Exact Match (%) | Total Samples
+| `document_number` | `EasyOCR` | 0 | 100.0 | 23
+| `document_number` | `TesseractOCR` | 0.87 | 95.65 | 23
+| `document_number` | `PaddleOCR` | 0.0 | 100.0 | 23
+|===
+
+Both `EasyOCR` and `PaddleOCR` achieved pefect results on the document number extraction task. The results of `TesseractOCR` are very good but underperforming compared to the other two engines.
+
+==== *Tramite Number*
+[cols="1,2,2,2,1", options="header"]
+|===
+|Element | OCR Engine | Mean CER (%) | Exact Match (%) | Total Samples
+| `tramite_number` | `EasyOCR` | 15.42 | 69.57 | 23
+| `tramite_number` | `TesseractOCR` | 73.91 | 95.65 | 23
+| `tramite_number` | `PaddleOCR` | 8.70 | 91.3 | 23
+|===
+
+In this case, `PaddleOCR` achieved the best results on the tramite number extraction task. The results are far superior to those of the other engines.
+
+==== *MRZ (Machine Readable Zone)*
+[cols="1,2,2,2,1", options="header"]
+|===
+|Element | OCR Engine | Mean CER (%) | Exact Match (%) | Total Samples
+| `mrz` | `EasyOCR` | 1.37 | 52.94 | 17
+| `mrz` | `TesseractOCR` | 2.61 | 58.82 | 17
+| `mrz` | `PaddleOCR` | 0.07 | 94.12 | 17
+|===
+
+In the case of the MRZ extraction task, `PaddleOCR` achieved the best results with a very low CER and a high exact match percentage. The results of `EasyOCR` and `TesseractOCR` are far inferior to those of `PaddleOCR`.
+
+==== *Address*
+[cols="1,2,2,2,1", options="header"]
+|===
+|Element | OCR Engine | Mean CER (%) | Exact Match (%) | Total Samples
+| `address` | `EasyOCR` | 37.59 | 0 | 17
+| `address` | `TesseractOCR` | 38.22 | 0 | 17
+| `address` | `PaddleOCR` | 30.45 | 11.76 | 17
+|===
+
+In this case, the task of extracting the address from the Argentine ID-Card is very challenging for all the OCR engines. Even so, `PaddleOCR` achieved better results than the other two engines.
+
+=== *Conclusions*
+
+In all elements of the Argentine ID-Card, `PaddleOCR` achieved the best results. The task of extracting the address is very challenging for all the OCR engines, but `PaddleOCR` achieved better results than the other two engines.
+
+Why `PaddleOCR` achieved better results than the other two engines?
+
+* Architecture: used a combination of DBNet++ for text detection and STVR (Slowly Vision Transformers) to text recognition. This architecture is more robust and accurate than the architectures used by `EasyOCR` and `TesseractOCR`.
+* Precision in Numeric and Monospaced Fonts.
+* Handling of Dots and Delimiters: PaddleOCR does not confuse DNI thousands separators with commas, nor does it generate unwanted spaces at the end of the text.
+
+Given the results of this benchmark, `PaddleOCR` is the best OCR engine to extract the data from the elements of the Argentine ID-Card (DNI) in images.
+
+But as the task of extracting the address is very difficult for all the OCR engines, include `PaddleOCR`, is recommended to use a VLM (Vision Language Model) to extract the address from the Argentine ID-Card.
+
+=== *References*
+
+* https://pypi.org/project/easyocr/[EasyOCR Documentation]
+* https://www.paddleocr.ai/main/en/quick_start.html#installation[PaddleOCR Documentation]
+* https://pypi.org/project/pytesseract/[TesseractOCR Documentation]
