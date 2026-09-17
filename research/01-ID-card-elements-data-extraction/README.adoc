@@ -11,7 +11,7 @@
 [abstract]
 == *Executive Summary*
 
-This work builds an *end-to-end pipeline* to detect and extract data form the elements of the Argentine ID Card (DNI) using a *YOLOv26* model and OCR techniques for character reading.
+This work builds an *end-to-end pipeline* to detect and extract data from the elements of the Argentine ID Card (DNI) using a *YOLOv26* model and OCR techniques for character reading.
 
 
 == *Fine-tuning the YOLOv26 model*
