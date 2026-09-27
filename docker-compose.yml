@@ -1,3 +1,4 @@
+version: "3.8"
 services:
   research:
     container_name: research
@@ -10,7 +11,7 @@ services:
       - BASE_WORKDIR=/opt/project/
       - BASE_OUTPUT_WORKDIR=/opt/project/data/prc/outputs
     ports:
-      - "5151:5151"
+      - "5152:5151"
     volumes:
       - ./data:/opt/project/data
       - .:/opt/project/
@@ -21,7 +22,15 @@ services:
     container_name: api
     build:
       context: ./
-      dockerfile: Dockerfile_api
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    env_file:
+      - ./app/.env
+    volumes:
+      - ./app:/opt/project/app
+    networks:
+      - default_network
 
 networks:
   default_network:
