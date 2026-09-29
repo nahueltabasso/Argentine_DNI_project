@@ -5,3 +5,4 @@ research/01-ID-card-elements-data-extraction/runs/*
 
 app/__pycache__/*
 app/.env
+.env
