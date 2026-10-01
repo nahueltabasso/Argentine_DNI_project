@@ -17,6 +17,7 @@ async def business_exception_handler(
         content={
             "status": status.HTTP_400_BAD_REQUEST,
             "message": exc.message,
+            "error_code": exc.error_code,
             "method": request.method,
             "url": str(request.url),
         }
@@ -28,5 +29,11 @@ async def unhandled_error_handler(
     logger.exception("Error not handled in %s %s", request.method, request.url.path)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={"error_code": "INTERNAL_ERROR", "message": "Internal server error"},
+        content={
+            "status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+            "message": "Internal server error",
+            "error_code": "INTERNAL_ERROR", 
+            "method": request.method,
+            "url": str(request.url),
+        }
     )
