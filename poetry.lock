@@ -4071,6 +4071,18 @@ gmpy = ["gmpy2 (>=2.1.0a4) ; platform_python_implementation != \"PyPy\""]
 tests = ["pytest (>=4.6)"]
 
 [[package]]
+name = "mrz"
+version = "0.6.2"
+description = "Machine readable zone generator and checker for passports, visas, id cards and other travel documents"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "mrz-0.6.2-py3-none-any.whl", hash = "sha256:3da437c095715d9d3fc49b10a684bc2eec3085fed0b197eb23410da4e8d26e4d"},
+    {file = "mrz-0.6.2.tar.gz", hash = "sha256:54bb3b370ccc371b7fb86c05add8874346e7a86698d8822c4884cb61904ff8ee"},
+]
+
+[[package]]
 name = "multidict"
 version = "6.8.0"
 description = "multidict implementation"
@@ -6756,6 +6768,18 @@ files = [
 
 [package.extras]
 cli = ["click (>=5.0)"]
+
+[[package]]
+name = "python-multipart"
+version = "0.0.32"
+description = "A streaming multipart parser for Python"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "python_multipart-0.0.32-py3-none-any.whl", hash = "sha256:ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23"},
+    {file = "python_multipart-0.0.32.tar.gz", hash = "sha256:be54b7f3fa167bb83e4fcd936b887b708f4e57fe75911c02aebf53efaf8d938e"},
+]
 
 [[package]]
 name = "python-neo-lzf"
@@ -9670,7 +9694,21 @@ files = [
 [package.extras]
 cffi = ["cffi (>=1.17,<2.0) ; platform_python_implementation != \"PyPy\" and python_version < \"3.14\"", "cffi (>=2.0.0b) ; platform_python_implementation != \"PyPy\" and python_version >= \"3.14\""]
 
+[[package]]
+name = "zxing"
+version = "1.0.4"
+description = "Wrapper for decoding/reading barcodes with ZXing (Zebra Crossing) library"
+optional = false
+python-versions = ">=3"
+groups = ["main"]
+files = [
+    {file = "zxing-1.0.4.tar.gz", hash = "sha256:e588c7001f8d2f0f938f4066fa4270f29f641fd520f4f662620545d3fd72ae1a"},
+]
+
+[package.extras]
+image = ["pillow (>=3.0,<6.0) ; python_version < \"3.5\"", "pillow (>=3.0,<8.0) ; python_version == \"3.5\"", "pillow (>=8.0) ; python_version >= \"3.6\""]
+
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.13"
-content-hash = "ba7a4298eb5fa50abe59a05b7d9f869651e7c6c5764d3e4043f9206bfa9395b3"
+content-hash = "2c3943009a67d14442de188442ad066fe2c4136277220d90ebd7ce38adfad3d1"
