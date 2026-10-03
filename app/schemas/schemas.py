@@ -1,5 +1,5 @@
 from enum import IntEnum, StrEnum
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 from datetime import datetime
 from dataclasses import dataclass
 import numpy as np
@@ -32,6 +32,27 @@ class ArgentineIDData(BaseModel):
     address: str | None = Field(None, description="Address")
     has_country: bool | None = Field(None, description="Country")
     timestamp: datetime = Field(..., description="Timestamp of the document")
+
+    @computed_field
+    @property
+    def match_confidence(self) -> float: 
+        """Calculate match confidence between document fields and extracted data"""
+        pdf417 = self.pdf417 or {}
+        mrz_number = self.mrz.document_number if self.mrz else None
+        doc_number = self.doc_number.replace(".", "").replace(",", "") if self.doc_number else None
+        
+        checks = [
+            (doc_number, mrz_number),
+            (doc_number, pdf417.get("document_number")),
+            (pdf417.get("document_number"), mrz_number),
+            (self.tramite_number, pdf417.get("tramite_number")),
+        ]
+
+        comparable = [(a, b) for a, b in checks if a and b]
+        if not comparable:
+            return 0.0
+
+        return sum(a == b for a, b in comparable) / len(comparable)
 
 class DocumentDetected(BaseModel):
     side: str = Field(..., description="Document side, e.g., 'front' or 'back'")

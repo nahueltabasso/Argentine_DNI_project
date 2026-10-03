@@ -180,10 +180,11 @@ class ElementsService(Inference):
                       element: ElementDetection | None) -> str | None:
         """Read address from the specified element in the image."""
         logger.info("Reading address from element in image.")
+        if element is None or element.crop is None:
+            return None
         if self._settings.address_strategy != "vlm":
             return self._read_text(element=element, join_char=" ")
         return self._ocr_service.recognize_text_with_gemini(Image.fromarray(element.crop)) # type: ignore
-    
     
     def get_data_from_side(self, image: np.ndarray, side: str = "") -> ArgentineIDData | None:
         """Extract data from the specified side of the Argentine ID."""

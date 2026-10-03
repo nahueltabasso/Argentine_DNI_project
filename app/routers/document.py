@@ -15,8 +15,7 @@ def detect_document(
 ):
     logger.info("Enter to detect_document endpoint")
     image = image_to_ndarray(file)
-    response = detector.get_argentine_ID_card(image)
-    return response
+    return detector.get_argentine_ID_card(image)
 
 @router.post("/document/extract-full",  status_code=status.HTTP_200_OK, response_model=ArgentineIDData)
 def extract_full_document(
@@ -27,8 +26,15 @@ def extract_full_document(
     logger.info("Enter to extract_full_document endpoint")
     image = image_to_ndarray(file)
     image1 = image_to_ndarray(file1)
-    response = service.get_data_from_doc(image, image1)
-    return response
+    return service.get_data_from_doc(image, image1)
 
-# @router.post("/document/extract", status_code=status.HTTP_200_OK, response_model=ArgentineIDData)
-# def 
+@router.post("/document/extract", status_code=status.HTTP_200_OK, response_model=ArgentineIDData)
+def extract(
+    side: str, 
+    service: ElementsServiceDep, 
+    file: UploadFile = File(...)
+):
+    logger.info("Enter to extract endpoint")
+    image = image_to_ndarray(file)
+    return service.get_data_from_side(image, side=side)
+    
