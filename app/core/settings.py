@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     google_api_key: SecretStr | None = None
     vlm_model: str = "gemini-3.6-flash"
     vlm_timeout_s: float = 30.0
+    prompt: str = ""
     
     @model_validator(mode="after") # type: ignore
     def check_vlm_key(self) -> "Settings": 

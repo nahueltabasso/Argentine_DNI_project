@@ -5,7 +5,7 @@ from app.core.settings import Settings
 from app.services.inference import Inference
 from app.core.exceptions import BusinessLogicError
 from app.schemas.error_codes import ErrorCode
-from app.schemas.schemas import DocumentDetected
+from app.schemas.schemas import DocumentDetected, SidesName
 import threading
 import numpy as np
 import logging
@@ -65,7 +65,7 @@ class DocumentDetector(Inference):
             raise BusinessLogicError("Unknown class detected.",
                                      error_code=ErrorCode.UNKNOWN_CLASS_ERROR)
         return DocumentDetected(
-            side="front" if cls_ == FRONT_CLASS else "back",
+            side=SidesName.FRONT if cls_ == FRONT_CLASS else SidesName.BACK,
             points=points,
             confidence=round(conf, 2),
             timestamp=datetime.now()

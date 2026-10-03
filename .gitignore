@@ -2,7 +2,7 @@
 data/*
 research/00-argentinian-ID-card-detection/runs/*
 research/01-ID-card-elements-data-extraction/runs/*
-
-app/__pycache__/*
+.vscode/
+__pycache__/
 app/.env
 .env

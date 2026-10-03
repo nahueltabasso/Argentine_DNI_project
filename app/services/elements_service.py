@@ -7,7 +7,7 @@ from itertools import zip_longest
 from app.services.document_detector import DocumentDetector
 from app.core.exceptions import BusinessLogicError
 from app.schemas.error_codes import ErrorCode
-from app.schemas.schemas import ArgentineIDData, DocumentDetected, ElementDetection, ElementsID, FrontIDData, BackIDData, MRZData, SidesName
+from app.schemas.schemas import ArgentineIDData, DocumentDetected, ElementDetection, ElementsID, MRZData
 from app.services.inference import Inference
 from app.core.settings import Settings
 from app.services.ocr_service import OCRService
@@ -18,6 +18,10 @@ import logging
 import zxing
 
 logger = logging.getLogger(__name__)
+PDF417_FIELDS = (
+    "tramite_number", "surname", "name", "gender",
+    "document_number", "category", "birth_date", "issue_date",
+)
 
 class ElementsService(Inference):
     _instance: Optional["ElementsService"] = None
@@ -27,6 +31,7 @@ class ElementsService(Inference):
                  settings: Settings, 
                  doc_detector: DocumentDetector,
                  ocr_service: OCRService) -> None:
+        self._settings = settings
         self._doc_detector = doc_detector
         self._ocr_service = ocr_service
         self._pdf417_reader = zxing.BarCodeReader() 
@@ -56,7 +61,7 @@ class ElementsService(Inference):
     def get_data_from_doc(self, 
                           front_image: np.ndarray,
                           back_image: np.ndarray) -> ArgentineIDData | None:
-        
+        """Extract Data from Argentine ID Card."""
         logger.info("Enter to get_data_from_doc()")
         logger.info("Detecting document in front image %s", front_image.shape)
         front_side: DocumentDetected = self._doc_detector.get_argentine_ID_card(image=front_image)
@@ -71,7 +76,13 @@ class ElementsService(Inference):
         front_card = rectify_obb(image=front_image, obb_points=front_side.points)
         back_card = rectify_obb(image=back_image, obb_points=back_side.points)
         images = [front_card, back_card]
-       
+        # Detect elements in the cropped and rectified images.
+        elements: dict[ElementsID, ElementDetection] = self._detect_elements(images=images)
+        logger.info("Detected %d elements", len(elements))
+        return self._build_data(elements=elements)
+    
+    def _detect_elements(self, images: list) -> dict[ElementsID, ElementDetection]:
+        """Detect elements of Argentine ID Card from images and return a dictionary mapping ElementsID to ElementDetection."""
         elements: dict[ElementsID, ElementDetection] = {}
         for img in images:
             result = self.predict(image=img)
@@ -89,11 +100,13 @@ class ElementsService(Inference):
                         conf=conf,
                         crop=img[box[1]:box[3], box[0]:box[2]]
                     )
-        logger.info("Detected %d elements", len(elements))
-        return self._build_data(elements=elements)
+        return elements
     
-    def _build_data(self, elements: dict[ElementsID, ElementDetection]) -> ArgentineIDData | None:
+    def _build_data(self,
+                    elements: dict[ElementsID, ElementDetection],
+                    side: str = "") -> ArgentineIDData | None:
         return ArgentineIDData(
+            side=side,
             doc_number=self._read_text(element=elements.get(ElementsID.DOC_NUMBER_CLS), join_char=""),
             tramite_number=self._read_text(element=elements.get(ElementsID.TRAMITE_NUMBER_CLS), join_char=""), 
             has_shield=ElementsID.SHIELD_CLS in elements,
@@ -102,6 +115,7 @@ class ElementsService(Inference):
             gender=self._get_gender(element=elements.get(ElementsID.GENDER_CLS), join_char=""),
             pdf417=self._read_pdf417(element=elements.get(ElementsID.PDF417_CLS)),
             mrz=self._read_mrz(element=elements.get(ElementsID.MRZ_CLS)), 
+            address=self._read_address(element=elements.get(ElementsID.ADDRESS_CLS)),
             timestamp=datetime.now()
         ) # type: ignore
         
@@ -135,11 +149,6 @@ class ElementsService(Inference):
         raw = barcode.raw if barcode is not None else None
         if raw is not None:
             raw = raw.split("@")
-            PDF417_FIELDS = (
-                "tramite_number", "surname", "name", "gender",
-                "document_number", "category", "birth_date", "issue_date",
-            )
-
             return dict(zip_longest(PDF417_FIELDS, raw[:len(PDF417_FIELDS)]))
         logger.warning(
             "Failed to read PDF417 from element in image of shape: %s", element.crop.shape
@@ -166,34 +175,24 @@ class ElementsService(Inference):
         except Exception as e:
             logger.error("Failed to read MRZ: %s", e)
             return None
-             
-    # def _extract_front_data(self, image: np.ndarray) -> FrontIDData | None:
-        
-    #     logger.info("Extracting front ID data from the image.")
-    #     logger.info(f"Executing inference with {self._model.model_nfsafame}")
-    #     result = self.predict(image)
-        
-    #     if result.boxes is None or len(result.boxes) == 0:
-    #         return FrontIDData(
-    #             doc_number=None,
-    #             tramite_number=None,
-    #             has_shield=None,
-    #             pdf417=None,
-    #             mrz=None,
-    #             gender=None,
-    #             timestamp=datetime.now()
-    #         )
-    #     xyxy = [list(map(int, box)) for box in result.boxes.xyxy.tolist()]
-    #     classes = [int(cls) for cls in result.boxes.cls.tolist()]
-        
-    #     front_data = FrontIDData() # type: ignore
-        
-    #     for box, cls in zip(xyxy, classes):
-    #         pass
-    #     print(result.boxes.xyxy)
-    #     print(result.boxes.conf)
-    #     print(type(result.boxes.xyxy))
-    #     print(type(result.boxes.conf))
-    #     import cv2
-    #     cv2.imwrite("output.jpg", result.plot())
-    #     return None
+    
+    def _read_address(self,
+                      element: ElementDetection | None) -> str | None:
+        """Read address from the specified element in the image."""
+        logger.info("Reading address from element in image.")
+        if self._settings.address_strategy != "vlm":
+            return self._read_text(element=element, join_char=" ")
+        return self._ocr_service.recognize_text_with_gemini(Image.fromarray(element.crop)) # type: ignore
+    
+    
+    def get_data_from_side(self, image: np.ndarray, side: str = "") -> ArgentineIDData | None:
+        """Extract data from the specified side of the Argentine ID."""
+        logger.info("Extracting data from side: %s", side)
+        doc_rec = self._doc_detector.get_argentine_ID_card(image=image)
+        if doc_rec.side != side:
+            raise BusinessLogicError("The side of the detected Argentine ID not match with the requested side.",
+                                     error_code=ErrorCode.NOT_MATCH_SIDE_ERROR)
+        img = rectify_obb(image=image, obb_points=doc_rec.points)
+        elements: dict[ElementsID, ElementDetection] = self._detect_elements(images=[img])
+        logger.info("Detected %d elements for the %s side", len(elements), side)
+        return self._build_data(elements=elements, side=side)

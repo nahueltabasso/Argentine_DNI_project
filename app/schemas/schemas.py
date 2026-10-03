@@ -21,6 +21,7 @@ class MRZData(BaseModel):
 
 class ArgentineIDData(BaseModel):
 
+    side: str = Field("", description="Document side, e.g., 'front' or 'back'")
     doc_number: str | None = Field(None, description="Document number")
     tramite_number: str | None = Field(None, description="Tramite number")
     has_shield: bool | None = Field(None, description="Shield status")
@@ -32,32 +33,12 @@ class ArgentineIDData(BaseModel):
     has_country: bool | None = Field(None, description="Country")
     timestamp: datetime = Field(..., description="Timestamp of the document")
 
-
-class FrontIDData(BaseModel):
-    
-    doc_number: str | None = Field(None, description="Document number")
-    tramite_number: str | None = Field(None, description="Tramite number")
-    has_shield: bool | None = Field(False, description="Shield status")
-    pdf417: dict | None = Field(None, description="PDF 417 data")
-    mrz: dict | None = Field(None, description="MRZ data")
-    gender: str | None = Field(None, description="Gender")
-    timestamp: datetime = Field(..., description="Timestamp of the document side")
-
-class BackIDData(BaseModel):
-    
-    address: str | None = Field(None, description="Address")
-    has_country: bool | None = Field(None, description="Country")
-    mrz: dict | None = Field(None, description="MRZ data")
-    pdf417: dict | None = Field(None, description="PDF 417 data")
-    tramite_number: str | None = Field(None, description="Tramite number")
-    
 class DocumentDetected(BaseModel):
     side: str = Field(..., description="Document side, e.g., 'front' or 'back'")
     points: list[list[int]] = Field(..., description="Coordinates of the document side")
     confidence: float = Field(..., description="Confidence level of the document side")
     timestamp: datetime = Field(..., description="Timestamp of the document side")
-    
-    
+
 @dataclass  
 class ElementDetection:
     
