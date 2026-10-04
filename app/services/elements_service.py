@@ -1,5 +1,4 @@
 from ultralytics import YOLO
-from typing import Optional
 from datetime import datetime
 from PIL import Image
 from mrz.checker.td1 import TD1CodeChecker
@@ -12,10 +11,10 @@ from app.services.inference import Inference
 from app.core.settings import Settings
 from app.services.ocr_service import OCRService
 from app.utils.file_utils import rectify_obb
-import threading
 import numpy as np
 import logging
-import zxing
+import zxingcpp
+import cv2
 
 logger = logging.getLogger(__name__)
 PDF417_FIELDS = (
@@ -24,8 +23,6 @@ PDF417_FIELDS = (
 )
 
 class ElementsService(Inference):
-    _instance: Optional["ElementsService"] = None
-    _instance_lock = threading.Lock()
 
     def __init__(self, 
                  settings: Settings, 
@@ -34,7 +31,6 @@ class ElementsService(Inference):
         self._settings = settings
         self._doc_detector = doc_detector
         self._ocr_service = ocr_service
-        self._pdf417_reader = zxing.BarCodeReader() 
         super().__init__(
             model=YOLO(str(settings.yolo_id_elements_detector)), 
             conf_thresh=settings.elem_conf,
@@ -43,21 +39,6 @@ class ElementsService(Inference):
             device=settings.device
         )
         
-    @classmethod
-    def initialize(cls, settings: Settings) -> "ElementsService":
-        with cls._instance_lock:
-            if cls._instance is None:
-                cls._instance = cls(settings,
-                                    DocumentDetector.get_instance(), 
-                                    OCRService.get_instance())
-        return cls._instance
-    
-    @classmethod
-    def get_instance(cls) -> "ElementsService":
-        if cls._instance is None:
-            raise RuntimeError("ElementsService has not been initialized.")
-        return cls._instance
-    
     def get_data_from_doc(self, 
                           front_image: np.ndarray,
                           back_image: np.ndarray) -> ArgentineIDData | None:
@@ -134,7 +115,7 @@ class ElementsService(Inference):
         if element is None:
             return None
         logger.info("Getting gender from element in image of shape: %s", element.crop.shape)
-        text = self._read_text(element=element, join_char=join_char)
+        text = self._read_text(element=element, join_char=join_char).strip()
         text = "Female" if text == 'F' else "Male" if text == 'M' else None
         logger.info("Detected gender: %s", text)
         return text
@@ -145,8 +126,8 @@ class ElementsService(Inference):
             return None
         logger.info("Reading PDF417 from element in image of shape: %s", element.crop.shape)
         cropped_img = Image.fromarray(element.crop)
-        barcode = self._pdf417_reader.decode(cropped_img)
-        raw = barcode.raw if barcode is not None else None
+        barcode = zxingcpp.read_barcodes(cropped_img)
+        raw = barcode.text if barcode is not None else None
         if raw is not None:
             raw = raw.split("@")
             return dict(zip_longest(PDF417_FIELDS, raw[:len(PDF417_FIELDS)]))
@@ -184,7 +165,8 @@ class ElementsService(Inference):
             return None
         if self._settings.address_strategy != "vlm":
             return self._read_text(element=element, join_char=" ")
-        return self._ocr_service.recognize_text_with_gemini(Image.fromarray(element.crop)) # type: ignore
+        image: Image.Image = Image.fromarray(cv2.cvtColor(element.crop, cv2.COLOR_BGR2RGB)) 
+        return self._ocr_service.recognize_text_with_gemini(image) 
     
     def get_data_from_side(self, image: np.ndarray, side: str = "") -> ArgentineIDData | None:
         """Extract data from the specified side of the Argentine ID."""

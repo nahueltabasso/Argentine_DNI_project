@@ -1,4 +1,3 @@
-from typing import Optional
 from datetime import datetime
 from ultralytics import YOLO
 from app.core.settings import Settings
@@ -6,7 +5,6 @@ from app.services.inference import Inference
 from app.core.exceptions import BusinessLogicError
 from app.schemas.error_codes import ErrorCode
 from app.schemas.schemas import DocumentDetected, SidesName
-import threading
 import numpy as np
 import logging
 
@@ -17,9 +15,6 @@ BACK_CLASS = 1
 
 class DocumentDetector(Inference):
     
-    _instance: Optional["DocumentDetector"] = None
-    _instance_lock = threading.Lock()
-    
     def __init__(self, settings: Settings) -> None:
         super().__init__(
             model=YOLO(str(settings.yolo_dni_detector)),
@@ -29,19 +24,6 @@ class DocumentDetector(Inference):
             device=settings.device
         )
         
-    @classmethod
-    def initialize(cls, settings: Settings) -> "DocumentDetector":
-        with cls._instance_lock:
-            if cls._instance is None:
-                cls._instance = cls(settings)
-        return cls._instance
-    
-    @classmethod
-    def get_instance(cls) -> "DocumentDetector":
-        if cls._instance is None:
-            raise RuntimeError("DocumentDetector has not been initialized.")
-        return cls._instance
-    
     def get_argentine_ID_card(self, image: np.ndarray) -> DocumentDetected:
         logger.info("Starting Argentine ID card detection.")
         result = self.predict(image)

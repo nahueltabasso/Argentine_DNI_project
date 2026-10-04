@@ -72,10 +72,8 @@ def rectify_obb(image: np.ndarray,
     matrix = cv2.getPerspectiveTransform(src, dst)
 
     # Transformation
-    warped = cv2.warpPerspective(
+    return cv2.warpPerspective(
         image,
         matrix,
         (target_width, target_height)
     )
-
-    return warped

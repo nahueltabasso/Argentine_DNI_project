@@ -1,6 +1,7 @@
 from ultralytics import YOLO
 from ultralytics.engine.results import Results
 import numpy as np
+import threading
 
 class Inference:
     
@@ -14,12 +15,14 @@ class Inference:
         self._iou = iou
         self._img_size = img_size
         self._device = device
+        self._lock = threading.Lock()
 
     def predict(self, image: np.ndarray) -> Results:
-        return self._model.predict(
-            source=image,
-            conf=self._conf_thresh,
-            iou=self._iou,
-            imgsz=self._img_size,
-            device=self._device
-        )[0] # type: ignore
+        with self._lock:
+            return self._model.predict(
+                source=image,
+                conf=self._conf_thresh,
+                iou=self._iou,
+                imgsz=self._img_size,
+                device=self._device
+            )[0] # type: ignore

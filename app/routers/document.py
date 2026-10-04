@@ -1,4 +1,5 @@
 from fastapi import APIRouter, File, UploadFile, status
+from typing import Literal
 from app.dependencies.dependency import DocumentDetectorDep, ElementsServiceDep
 from app.schemas.schemas import ArgentineIDData, DocumentDetected
 from app.utils.file_utils import image_to_ndarray
@@ -20,17 +21,17 @@ def detect_document(
 @router.post("/document/extract-full",  status_code=status.HTTP_200_OK, response_model=ArgentineIDData)
 def extract_full_document(
     service: ElementsServiceDep,
-    file: UploadFile = File(...),
-    file1: UploadFile = File(...)
+    front: UploadFile = File(...),
+    back: UploadFile = File(...)
 ):
     logger.info("Enter to extract_full_document endpoint")
-    image = image_to_ndarray(file)
-    image1 = image_to_ndarray(file1)
-    return service.get_data_from_doc(image, image1)
+    front_img = image_to_ndarray(front)
+    back_img = image_to_ndarray(back)
+    return service.get_data_from_doc(front_img, back_img)
 
 @router.post("/document/extract", status_code=status.HTTP_200_OK, response_model=ArgentineIDData)
 def extract(
-    side: str, 
+    side: Literal["front", "back"], 
     service: ElementsServiceDep, 
     file: UploadFile = File(...)
 ):

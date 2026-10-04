@@ -17,20 +17,17 @@ settings = get_settings()
 async def lifespan(app: FastAPI):
     settings = get_settings()
     setup_logging(settings.log_level)
-
-    logger.info("Loading models...")
-    app.state.document_detector = DocumentDetector(settings)
-    app.state.ocr_service = OCRService(settings)
-    app.state.elements_service = ElementsService(
-        settings,
-        app.state.document_detector,
-        app.state.ocr_service,
-    )
-    logger.info("Models loaded")
-
+    if settings.load_models:
+        logger.info("Loading models...")
+        app.state.document_detector = DocumentDetector(settings)
+        app.state.ocr_service = OCRService(settings)
+        app.state.elements_service = ElementsService(
+            settings,
+            app.state.document_detector,
+            app.state.ocr_service,
+        )
+        logger.info("Models loaded")
     yield    
-    app.state.clear()
-
 
 app = FastAPI(lifespan=lifespan)
 # Include Routers

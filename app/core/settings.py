@@ -32,9 +32,10 @@ class Settings(BaseSettings):
     
     # --- Address / VLM ---
     address_strategy: Literal["paddleocr", "vlm"] = "vlm"
-    google_api_key: SecretStr | None = None
+    google_api_key: SecretStr | str = None
     vlm_model: str = "gemini-3.6-flash"
     vlm_timeout_s: float = 30.0
+    vlm_max_retries: int = 3
     prompt: str = ""
     
     @model_validator(mode="after") # type: ignore
