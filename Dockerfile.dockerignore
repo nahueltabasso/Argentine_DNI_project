@@ -1,0 +1,15 @@
+# Exclude all files by default
+*
+
+# Allow only what the Dockerfile copies
+!requirements.txt
+!app/
+!weights/yolo/yolo26s-obb-DNI-det.pt
+!weights/yolo/yolo26s_ID_elements_det.pt
+
+# Within the allowed files, exclude what is unnecessary
+**/__pycache__/
+**/*.pyc
+**/.env
+**/.env.*
+app/tests/
