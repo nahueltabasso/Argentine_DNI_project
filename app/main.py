@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.core.exception_handlers import business_exception_handler, unhandled_error_handler
 from app.core.exceptions import BusinessLogicError
@@ -35,8 +35,3 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.add_exception_handler(BusinessLogicError, business_exception_handler) # type: ignore
     app.add_exception_handler(Exception, unhandled_error_handler) # type: ignore
     return app
-
-
-# @app.get("/health", status_code=status.HTTP_200_OK)
-# def health_check():
-#     return {"status": "ok"}
