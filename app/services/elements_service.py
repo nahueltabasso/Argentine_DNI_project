@@ -127,10 +127,11 @@ class ElementsService(Inference):
         logger.info("Reading PDF417 from element in image of shape: %s", element.crop.shape)
         cropped_img = Image.fromarray(element.crop)
         barcode = zxingcpp.read_barcodes(cropped_img)
-        raw = barcode.text if barcode is not None else None
-        if raw is not None:
-            raw = raw.split("@")
-            return dict(zip_longest(PDF417_FIELDS, raw[:len(PDF417_FIELDS)]))
+        if len(barcode) == 1:
+            raw = barcode[0].text 
+            if raw is not None:
+                raw = raw.split("@")
+                return dict(zip_longest(PDF417_FIELDS, raw[:len(PDF417_FIELDS)]))
         logger.warning(
             "Failed to read PDF417 from element in image of shape: %s", element.crop.shape
         )
