@@ -127,7 +127,7 @@ class ElementsService(Inference):
         logger.info("Reading PDF417 from element in image of shape: %s", element.crop.shape)
         cropped_img = Image.fromarray(element.crop)
         barcode = zxingcpp.read_barcodes(cropped_img, 
-                                         formats=zxingcpp.BarcodeFormat.PDF_417)
+                                         formats=zxingcpp.BarcodeFormat.PDF417)
         if len(barcode) == 1:
             raw = barcode[0].text 
             raw = raw.split("@")
