@@ -21,6 +21,7 @@ PDF417_FIELDS = (
     "tramite_number", "surname", "name", "gender",
     "document_number", "category", "birth_date", "issue_date",
 )
+GENDERS = {"F": "Female", "M": "Male", "X": "X"}
 
 class ElementsService(Inference):
 
@@ -73,7 +74,7 @@ class ElementsService(Inference):
             xyxy = [list(map(int, box)) for box in result.boxes.xyxy.tolist()]
             classes = [int(cls) for cls in result.boxes.cls.tolist()]
             confs = [float(conf) for conf in result.boxes.conf.tolist()]
-            for box, cls_, conf in zip(xyxy, classes, confs):
+            for box, cls_, conf in zip(xyxy, classes, confs, strict=True):
                 element = ElementsID(int(cls_))
                 if element not in elements:
                     elements[element] = ElementDetection(
@@ -116,9 +117,9 @@ class ElementsService(Inference):
             return None
         logger.info("Getting gender from element in image of shape: %s", element.crop.shape)
         text = self._read_text(element=element, join_char=join_char).strip()
-        text = "Female" if text == 'F' else "Male" if text == 'M' else None
-        logger.info("Detected gender: %s", text)
-        return text
+        gender = GENDERS.get(text, None)
+        logger.info("Detected gender: %s", gender)
+        return gender
     
     def _read_pdf417(self, element: ElementDetection | None) -> dict | None:
         """Read PDF417 barcode from the specified element in the image using zxing."""

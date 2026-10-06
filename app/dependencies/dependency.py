@@ -1,4 +1,3 @@
-# app/dependencies/dependency.py
 from fastapi import Depends, Request
 from typing import Annotated
 from app.services.document_detector import DocumentDetector
@@ -13,6 +12,7 @@ def get_ocr_service(request: Request) -> OCRService:
 
 def get_elements_service(request: Request) -> ElementsService:
     return request.app.state.elements_service
+
 DocumentDetectorDep = Annotated[DocumentDetector, Depends(get_document_detector)]
 OCRServiceDep = Annotated[OCRService, Depends(get_ocr_service)]
 ElementsServiceDep = Annotated[ElementsService, Depends(get_elements_service)]

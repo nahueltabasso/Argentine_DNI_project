@@ -1,9 +1,20 @@
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from app.core.exceptions import BusinessLogicError
+from app.schemas.error_codes import ErrorCode
 import logging
 
 logger = logging.getLogger(__name__)
+
+ERROR_STATUS: dict[ErrorCode, int] = {
+    ErrorCode.INVALID_IMAGE_ERROR: status.HTTP_400_BAD_REQUEST,
+    ErrorCode.DOCUMENT_NOT_FOUND_ERROR: status.HTTP_422_UNPROCESSABLE_ENTITY,
+    ErrorCode.MULTIPLE_DOCUMENTS_ERROR: status.HTTP_422_UNPROCESSABLE_ENTITY,
+    ErrorCode.SAME_SIDE_ERROR: status.HTTP_422_UNPROCESSABLE_ENTITY,
+    ErrorCode.NOT_MATCH_SIDE_ERROR: status.HTTP_422_UNPROCESSABLE_ENTITY,
+    ErrorCode.UNKNOWN_CLASS_ERROR: status.HTTP_500_INTERNAL_SERVER_ERROR,
+}
+
 
 async def business_exception_handler(
     request: Request, 
@@ -13,9 +24,9 @@ async def business_exception_handler(
         exc.error_code, request.method, request.url.path, exc.message,
     )
     return JSONResponse(
-        status_code=status.HTTP_400_BAD_REQUEST,
+        status_code=ERROR_STATUS.get(exc.error_code, status.HTTP_400_BAD_REQUEST),
         content={
-            "status": status.HTTP_400_BAD_REQUEST,
+            "status": ERROR_STATUS.get(exc.error_code, status.HTTP_400_BAD_REQUEST),
             "message": exc.message,
             "error_code": exc.error_code,
             "method": request.method,
