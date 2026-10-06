@@ -1,14 +1,18 @@
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
+from app.services.pipeline import Pipeline
+from app.services.readers.mrz_reader import MRZReader
+from app.services.readers.pdf417_reader import PDF417Reader
+from app.services.readers.address_reader import GeminiOCRAddressReader, PaddleOCRAddressReader
+from app.services.document_detector import DocumentDetector
+from app.services.ocr_service import OCRService
+from app.services.elements_detector import ElementsDetector
+from app.routers import document as document_router
+from app.routers import health as health_router
 from app.core.exception_handlers import business_exception_handler, unhandled_error_handler
 from app.core.exceptions import BusinessLogicError
 from app.core.settings import Settings, get_settings
 from app.core.logging_config import setup_logging
-from app.services.document_detector import DocumentDetector
-from app.services.elements_service import ElementsService
-from app.services.ocr_service import OCRService
-from app.routers import document as document_router
-from app.routers import health as health_router
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
 import logging
 
 logger = logging.getLogger(__name__)
@@ -20,11 +24,22 @@ def create_app(settings: Settings | None = None) -> FastAPI:
      
     @asynccontextmanager
     async def lifespan(app: FastAPI):
+        ocr = OCRService()
+        address_reader = (
+            GeminiOCRAddressReader(settings)
+            if settings.address_strategy == "vlm"
+            else PaddleOCRAddressReader(ocr)
+
+        )
         if settings.load_models:
             app.state.document_detector = DocumentDetector(settings)
-            app.state.ocr_service = OCRService(settings)
-            app.state.elements_service = ElementsService(
-                settings, app.state.document_detector, app.state.ocr_service
+            app.state.pipeline = Pipeline(
+                document_detector=DocumentDetector(settings),
+                element_detector=ElementsDetector(settings),
+                ocr_service=ocr,
+                address_reader=address_reader,
+                pdf417_reader=PDF417Reader(),
+                mrz_reader=MRZReader(ocr),
             )
         yield
 

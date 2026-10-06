@@ -1,8 +1,8 @@
-from fastapi import APIRouter, File, UploadFile, status
-from typing import Annotated, Literal
-from app.dependencies.dependency import DocumentDetectorDep, ElementsServiceDep
+from app.dependencies.dependency import DocumentDetectorDep, PipelineDep
 from app.schemas.schemas import ArgentineIDData, DocumentDetected
 from app.utils.file_utils import image_to_ndarray
+from fastapi import APIRouter, File, UploadFile, status
+from typing import Annotated, Literal
 import logging
 
 logger = logging.getLogger(__name__)
@@ -20,22 +20,22 @@ def detect_document(
 
 @router.post("/document/extract-full",  status_code=status.HTTP_200_OK, response_model=ArgentineIDData)
 def extract_full_document(
-    service: ElementsServiceDep,
+    pipeline: PipelineDep,
     front: Annotated[UploadFile, File()],
     back: Annotated[UploadFile, File()],
 ):
     logger.info("Enter to extract_full_document endpoint")
     front_img = image_to_ndarray(front)
     back_img = image_to_ndarray(back)
-    return service.get_data_from_doc(front_img, back_img)
+    return pipeline.extract_full(front_img, back_img)
 
 @router.post("/document/extract", status_code=status.HTTP_200_OK, response_model=ArgentineIDData)
 def extract(
     side: Literal["front", "back"], 
-    service: ElementsServiceDep, 
+    pipeline: PipelineDep, 
     file: Annotated[UploadFile, File()]
 ):
     logger.info("Enter to extract endpoint")
     image = image_to_ndarray(file)
-    return service.get_data_from_side(image, side=side)
+    return pipeline.extract_side(image, side=side)
 

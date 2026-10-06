@@ -1,10 +1,10 @@
-from datetime import datetime
-from ultralytics import YOLO
 from app.core.settings import Settings
 from app.services.inference import Inference
 from app.core.exceptions import BusinessLogicError
 from app.schemas.error_codes import ErrorCode
 from app.schemas.schemas import DocumentDetected, SidesName
+from datetime import datetime
+from ultralytics import YOLO
 import numpy as np
 import logging
 
