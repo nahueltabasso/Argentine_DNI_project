@@ -1,15 +1,14 @@
-from ultralytics import YOLO
-from ultralytics.engine.results import Results
-import numpy as np
 import threading
 
+import numpy as np
+from ultralytics import YOLO
+from ultralytics.engine.results import Results
+
+
 class Inference:
-    
-    def __init__(self, model: YOLO,
-                 conf_thresh: float,
-                 iou: float,
-                 img_size: int,
-                 device: str) -> None:
+    def __init__(
+        self, model: YOLO, conf_thresh: float, iou: float, img_size: int, device: str
+    ) -> None:
         self._model = model
         self._conf_thresh = conf_thresh
         self._iou = iou
@@ -24,5 +23,5 @@ class Inference:
                 conf=self._conf_thresh,
                 iou=self._iou,
                 imgsz=self._img_size,
-                device=self._device
-            )[0] # type: ignore
+                device=self._device,
+            )[0]  # type: ignore

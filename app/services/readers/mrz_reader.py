@@ -11,7 +11,7 @@ class MRZReader:
         self._ocr_service = ocr_service
 
     def read(self,
-             element: ElementDetection,
+             element: ElementDetection | None,
              join_char: str = "\n") -> MRZData | None:
         """Read MRZ (Machine readable zone) from the specified element in the image."""
         if element is None:

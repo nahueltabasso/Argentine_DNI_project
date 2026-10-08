@@ -16,7 +16,7 @@ class PDF417Reader:
     def __init__(self) -> None:
         pass
 
-    def read(self, element: ElementDetection) -> dict | None:
+    def read(self, element: ElementDetection | None) -> dict | None:
         """Read PDF417 barcode from the specified element in the image using zxing."""
         if element is None:
             return None

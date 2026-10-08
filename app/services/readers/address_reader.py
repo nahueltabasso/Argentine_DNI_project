@@ -16,7 +16,7 @@ class AddressReader(Protocol):
     def read(self, 
              element: ElementDetection,
              join_char: str = " ") -> str | None:
-        pass
+        ...
 
 class PaddleOCRAddressReader:
 
@@ -24,7 +24,7 @@ class PaddleOCRAddressReader:
         self._ocr_service = ocr_service
 
     def read(self, 
-             element: ElementDetection,
+             element: ElementDetection | None,
              join_char: str = " ") -> str | None:
         if element is None:
             return None
@@ -43,7 +43,7 @@ class GeminiOCRAddressReader:
         self._timeout = settings.vlm_timeout_s
 
     def read(self,
-             element: ElementDetection,
+             element: ElementDetection | None,
              join_char: str = " ") -> str | None:
         if element is None:
             return None

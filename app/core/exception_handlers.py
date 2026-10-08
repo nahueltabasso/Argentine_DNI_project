@@ -1,8 +1,10 @@
-from app.core.exceptions import BusinessLogicError
-from app.schemas.error_codes import ErrorCode
+import logging
+
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
-import logging
+
+from app.core.exceptions import BusinessLogicError
+from app.schemas.error_codes import ErrorCode
 
 logger = logging.getLogger(__name__)
 
@@ -17,11 +19,14 @@ ERROR_STATUS: dict[ErrorCode, int] = {
 
 
 async def business_exception_handler(
-    request: Request, 
-    exc: BusinessLogicError) -> JSONResponse:
+    request: Request, exc: BusinessLogicError
+) -> JSONResponse:
     logger.warning(
-        "%s en %s %s: %s",
-        exc.error_code, request.method, request.url.path, exc.message,
+        "%s in %s %s: %s",
+        exc.error_code,
+        request.method,
+        request.url.path,
+        exc.message,
     )
     return JSONResponse(
         status_code=ERROR_STATUS.get(exc.error_code, status.HTTP_400_BAD_REQUEST),
@@ -31,20 +36,19 @@ async def business_exception_handler(
             "error_code": exc.error_code,
             "method": request.method,
             "url": str(request.url),
-        }
-    )    
+        },
+    )
 
-async def unhandled_error_handler(
-    request: Request,
-    exc: Exception) -> JSONResponse:
+
+async def unhandled_error_handler(request: Request, exc: Exception) -> JSONResponse:
     logger.exception("Error not handled in %s %s", request.method, request.url.path)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={
             "status": status.HTTP_500_INTERNAL_SERVER_ERROR,
             "message": "Internal server error",
-            "error_code": "INTERNAL_ERROR", 
+            "error_code": "INTERNAL_ERROR",
             "method": request.method,
             "url": str(request.url),
-        }
+        },
     )
