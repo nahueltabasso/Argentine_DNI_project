@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 class ElementsDetector(Inference):
     def __init__(self, settings: Settings) -> None:
-        self._settings = settings
         super().__init__(
             model=YOLO(str(settings.yolo_id_elements_detector)),
             conf_thresh=settings.elem_conf,
