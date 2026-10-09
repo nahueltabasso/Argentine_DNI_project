@@ -1,0 +1,209 @@
+= *ARGENTINE ID-CARD DETECTION AND DATA EXTRACTION API REST*
+
+:toc: macro
+:toclevels: 2
+:icons: font
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:warning-caption: :warning:
+endif::[]
+
+image:https://badges.aleen42.com/src/github.svg[GitHub,link=https://github.com/nahueltabasso/Argentine_DNI_project]
+image:https://badges.aleen42.com/src/python.svg[Python]
+image:https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white[PyTorch]
+image:https://badges.aleen42.com/src/docker.svg[Docker]
+image:https://badges.aleen42.com/src/visual_studio_code.svg[VS Code]
+image:https://badges.aleen42.com/src/google_gemini.svg[Google Gemini]
+image:http://badges.aleen42.com/src/fastapi.svg[FastAPI]
+
+== *Introduction*
+
+This project provides APIs Rest for Argentine ID-card detection and data extraction.
+
+== *Pipeline overview*
+
+++++
+<div align="center">
+  <img src="./README_asset.png" alt="Pipeline overview" width="900">
+</div>
+++++
+
+== *Requirements*
+
+* Python 3.12
+* OpenCV
+* Numpy
+* Ultralytics
+* Tesseract
+* PaddleOCR
+* FastAPI
+* Google GenAI
+* Pillow
+
+== *Project structure*
+
+[source,text]
+----
+app/
+├── main.py                       # App factory (create_app): wires services in lifespan and registers routers
+├── README.adoc
+├── README_asset.png              # Pipeline overview diagram
+│
+├── core/                         # Cross-cutting configuration
+│   ├── settings.py               # Settings (pydantic-settings) loaded from .env
+│   ├── logging_config.py         # Logging setup
+│   ├── exceptions.py             # BusinessLogicError
+│   └── exception_handlers.py     # Global handlers → JSON error responses
+│
+├── dependencies/
+│   └── dependency.py             # FastAPI dependencies (DocumentDetector, Pipeline)
+│
+├── routers/                      # HTTP layer (prefix /api/v1)
+│   ├── document.py               # POST /document/detect, /document/extract, /document/extract-full
+│   └── health.py                 # GET /health
+│
+├── schemas/
+│   ├── schemas.py                # Response models: ArgentineIDData, MRZData, DocumentDetected
+│   └── error_codes.py            # ErrorCode enum
+│
+├── services/                     # Business logic
+│   ├── pipeline.py               # Orchestrates detection → elements → readers → ArgentineIDData
+│   ├── inference.py              # Base class for YOLO inference
+│   ├── document_detector.py      # Stage 00: DNI detection + perspective correction (YOLO26s-OBB)
+│   ├── elements_detector.py      # Stage 01: DNI elements detection (YOLO26s)
+│   ├── ocr_service.py            # PaddleOCR wrapper
+│   └── readers/                  # One reader per element type
+│       ├── pdf417_reader.py      # PDF417 barcode decoding (zxing-cpp)
+│       ├── mrz_reader.py         # MRZ OCR + TD1 validation (mrz)
+│       └── address_reader.py     # Address: PaddleOCR or Gemini VLM (ADDRESS_STRATEGY)
+│
+└── utils/
+    └── file_utils.py             # UploadFile → ndarray, OBB point ordering and rectification
+----
+
+== *Getting Started*
+
+To get started with this project, follow these steps:
+
+[source, bash]
+----
+git clone https://github.com/nahueltabasso/Argentine_DNI_project.git
+cd Argentine_DNI_project
+----
+
+The service runs in a Docker container.
+
+[cols="2,2,4", options="header"]
+|===
+| Variable | Default | Description
+
+| `YOLO_DNI_DETECTOR` | *required* | Path to the DNI detector weights (YOLO26s-OBB)
+| `YOLO_ID_ELEMENTS_DETECTOR` | *required* | Path to the elements detector weights (YOLO26s)
+| `ADDRESS_STRATEGY` | `vlm` | `paddleocr` or `vlm` (Gemini)
+| `GOOGLE_API_KEY` | — | Required when `ADDRESS_STRATEGY=vlm`
+| `VLM_MODEL` | `gemini-3.6-flash` | Gemini model used for the address
+| `PROMPT` | `""` | Prompt sent to the VLM
+| `DEVICE` | `cpu` | `cpu`, `cuda` or `mps`
+| `DOC_CONF` / `ELEM_CONF` | `0.6` | Confidence thresholds
+| `LOG_LEVEL` | `INFO` | Logging level
+| `API_PREFIX` | `/api/v1` | API route prefix
+|===
+
+WARNING: If `ADDRESS_STRATEGY` is not set, it defaults to `vlm` and the app
+will fail to start without `GOOGLE_API_KEY`.
+
+After that, you can built and run the Docker container using the following commands:
+
+[source, bash]
+----
+# First build the Docker image for the API service
+docker compose build api
+# Then start the API service in detached mode
+docker compose up -d api
+----
+
+== *API Reference*
+
+Base URL: `http://localhost:8001/api/v1` +
+Interactive docs (Swagger UI): http://localhost:8001/docs
+
+[cols="1,3,2,4", options="header"]
+|===
+| Method | Endpoint | Form fields | Description
+
+| GET  | `/health` | — | Health check
+| POST | `/document/detect` | `file` | Detects the DNI and returns side, OBB points and confidence
+| POST | `/document/extract?side=front\|back` | `file` | Extracts the data from one side of the DNI
+| POST | `/document/extract-full` | `front`, `back` | Extracts both sides and cross-validates the data
+|===
+
+=== Example
+
+[source,bash]
+----
+curl -X POST "http://localhost:8001/api/v1/document/extract-full" \
+  -F "front=@dni_front.jpg" \
+  -F "back=@dni_back.jpg"
+----
+
+[source,json]
+----
+{
+  "side": "",
+  "doc_number": "string",
+  "tramite_number": "string",
+  "has_shield": true,
+  "has_picture": true,
+  "pdf417": {
+    "additionalProp1": {}
+  },
+  "mrz": {
+    "surname": "string",
+    "name": "string",
+    "country": "string",
+    "nationality": "string",
+    "birth_date": "string",
+    "expiry_date": "string",
+    "sex": "string",
+    "document_type": "string",
+    "document_number": "string",
+    "optional_data": "string",
+    "is_valid": false
+  },
+  "gender": "string",
+  "address": "string",
+  "has_country": true,
+  "timestamp": "2026-10-09T21:56:52.324Z",
+  "match_confidence": 0
+}
+----
+
+NOTE: `match_confidence` is the ratio of matching fields between the OCR, MRZ and PDF417
+readings (document number and tramite number).
+
+=== *Error responses*
+
+[cols="2,1,3", options="header"]
+|===
+| `error_code` | HTTP | When
+
+| `INVALID_IMAGE_ERROR` | 400 | The file is not a valid image
+| `DOCUMENT_NOT_FOUND_ERROR` | 422 | No DNI detected in the image
+| `MULTIPLE_DOCUMENTS_ERROR` | 422 | More than one DNI detected
+| `SAME_SIDE_ERROR` | 422 | `front` and `back` are the same side
+| `NOT_MATCH_SIDE_ERROR` | 422 | The detected side does not match the requested one
+| `UNKNOWN_CLASS_ERROR` | 500 | The model returned an unknown class
+|===
+
+== *Contributions*
+
+The contributions are welcome. Please open an issue or a pull request to suggest improvements or report bugs.
+
+== *Contact*
+
+*Nahuel Tabasso*
+
+* GitHub: https://github.com/nahueltabasso[@nahueltabasso]
+* LinkedIn: https://www.linkedin.com/in/tabassonahuel/[Nahuel Tabasso]
+* Email: mailto:nahueltabasso@gmail.com[nahueltabasso@gmail.com]
