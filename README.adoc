@@ -1,1 +1,159 @@
 = *ARGENTINE ID CARD PROJECT*
+
+:toc: macro
+:toclevels: 2
+:icons: font
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:warning-caption: :warning:
+endif::[]
+
+image:https://badges.aleen42.com/src/github.svg[GitHub,link=https://github.com/nahueltabasso/Argentine_DNI_project]
+image:https://badges.aleen42.com/src/python.svg[Python]
+image:https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white[PyTorch]
+image:https://badges.aleen42.com/src/docker.svg[Docker]
+image:https://badges.aleen42.com/src/visual_studio_code.svg[VS Code]
+image:https://badges.aleen42.com/src/hugging_face.svg[Hugging Face]
+image:https://badges.aleen42.com/src/google_gemini.svg[Google Gemini]
+image:http://badges.aleen42.com/src/fastapi.svg[FastAPI]
+
+== *Introduction*
+
+This is a research project focused of the identification, extraction and verification of the data contained in Argentine identity documents. This project was developed only for academics and learning purposes in the field of image processing and text recognition. The main objective of the project is to create an automated system that could recognize and validate the contained information on the Argentine ID-Cards accurately and efficiently. All the images used in this project are for educational purposes only and and I have the consent of members of my family and friends to use their ID-Cards for it.
+
+This project has two parts: 
+
+* Research ─► Focused on the research and development of algorithms for automatic identification, extraction, and verification of data from Argentine ID-Cards.
+* Application ─► Focused on the development of APIs Rest for interacting with the automated system. For more information refer to this link https://github.com/nahueltabasso/Argentine_DNI_project/blob/main/app/README.adoc[App Readme].
+
+== Data & ethics
+
+WARNING: The dataset is not public. Real samples were used with the consent of their owners
+and only synthetic examples are published. This project is for academic purposes only.
+
+NOTE: The data of the files that you could found inside of `research` directory was taken from *synthetic* ID-Cards. So it does not represent real personal information.
+
+== Pipeline overview
+....
+image ─► [00] DNI detection (YOLO26s-OBB) ─► crop + perspective correction
+      ─► [01] elements detection (YOLO26s) ─► readers: PDF417 · MRZ · address
+      ─► data validation ─► REST API (FastAPI)
+....
+
+== *Features* 
+
+* Automatic identification of Argentine ID-Cards.
+* Automatic identification of the elements of Argentine ID-Cards.
+* Extraction of relevant data such as document number, pdf417 or MRZ codes.
+* Verification of the validity of the extracted data.
+* Image processing and text recognition using advanced techniques.
+* API Rest for interacting with the automated system.
+
+== Research stages
+
+[cols="1,3,2,2,1", options="header"]
+|===
+| Stage | Goal | Model / Tool | Key result | Report
+
+| 00 | Detect and localize the DNI (front/back) | YOLO26s-OBB | mAP@50 = 0.956 | link:research/00-argentinian-ID-card-detection/README.adoc[Read]
+| 01a | Detect DNI elements (9 classes) | YOLO26s | mAP@50 = 0.97 | link:research/01-ID-card-elements-data-extraction/README.adoc[Read]
+| 01b | OCR engines benchmark | PaddleOCR | MRZ exact match 94% | link:research/01-ID-card-elements-data-extraction/README.adoc#data-extraction-from-argentine-id-cards-with-ocr[Read]
+|===
+
+== *Requirements*
+
+* Python 3.12
+* OpenCV
+* Numpy
+* Ultralytics
+* Tesseract
+* PaddleOCR
+* FastAPI
+* Google GenAI
+
+== Project structure
+
+[source,text]
+----
+.
+├── app/                          # REST API (FastAPI)
+│   ├── main.py                   # App factory (create_app)
+│   ├── core/                     # Settings, logging and exception handlers
+│   ├── dependencies/             # FastAPI dependency injection
+│   ├── routers/                  # Endpoints: document, health
+│   ├── schemas/                  # Pydantic models and error codes
+│   ├── services/
+│   │   ├── pipeline.py           # Orchestrates the full inference flow
+│   │   ├── document_detector.py  # Stage 00: DNI detection (YOLO26s-OBB)
+│   │   ├── elements_detector.py  # Stage 01: elements detection (YOLO26s)
+│   │   ├── ocr_service.py        # OCR engine wrapper
+│   │   └── readers/              # PDF417, MRZ and address readers
+│   └── utils/
+│
+├── research/                     # Notebooks and research reports
+│   ├── 00-argentinian-ID-card-detection/
+│   │   ├── 00..06_*.ipynb        # Synthetic data generation → training
+│   │   ├── config/               # coords_data.json (template field zones)
+│   │   ├── assets/               # Report figures
+│   │   └── README.adoc           # Stage 00 report
+│   └── 01-ID-card-elements-data-extraction/
+│       ├── 00..05_*.ipynb        # Elements detection + OCR benchmark
+│       ├── ground_truth/         # OCR ground truth (doc_number, mrz, address...)
+│       ├── ocr_engines_metrics/  # OCR benchmark results
+│       ├── assets/               # Report figures
+│       └── README.adoc           # Stage 01 report
+│
+├── data/                         # Datasets (not versioned)
+│   ├── templates/                # DNI templates for synthetic generation
+│   ├── Flickr-Faces-HQ/          # Faces used in synthetic DNIs
+│   ├── input_data/               # Raw input images
+│   ├── ds/                       # Final YOLO datasets
+│   └── prc/                      # Processing outputs
+│
+├── weights/
+│   ├── yolo/                     # Base checkpoints + fine-tuned models
+│   └── sam/                      # SAM3 (not versioned, download manually)
+│
+├── Dockerfile                    # API image
+├── Dockerfile_research           # Research image (Ultralytics + GPU)
+├── docker-compose.yml            # Services: research, api
+├── pyproject.toml / poetry.lock  # Dependencies (Poetry)
+└── requirements*.txt             # Dependencies (pip)
+----
+
+== *Getting Started*
+
+[source, bash]
+----
+git clone https://github.com/nahueltabasso/Argentine_DNI_project.git
+cd Argentine_DNI_project
+pip install -r requirements_research.txt
+----
+
+=== *Using Poetry as Package Manager*
+[source, bash]
+----
+# Create the virtual environment and install dependencies
+poetry config virtualenvs.in-project true
+poetry install
+----
+
+=== *Using Docker*
+[source, bash]
+----
+docker compose build research
+docker compose up -d research
+----
+
+== *Contributions*
+
+The contributions are welcome. Please open an issue or a pull request to suggest improvements or report bugs.
+
+== *Contact*
+
+*Nahuel Tabasso*
+
+* GitHub: https://github.com/nahueltabasso[@nahueltabasso]
+* LinkedIn: https://www.linkedin.com/in/tabassonahuel/[Nahuel Tabasso]
+* Email: mailto:nahueltabasso@gmail.com[nahueltabasso@gmail.com]
