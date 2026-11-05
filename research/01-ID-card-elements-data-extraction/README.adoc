@@ -126,7 +126,7 @@ wrong boxes in **CVAT**.
 | Curated and corrected ground-truth dataset.
 
 | 03
-| `03_train_and_metrics`**
+| `03_train_and_metrics`
 | Fine-tune the **YOLOv26 Small** model with the curated dataset and evaluate the performance on the test set.
 | Fine-tuned weights (`yolo26s_ID_elements_det.pt`) and evaluation report.
 |===
@@ -167,7 +167,7 @@ truths as false negatives.
 
 === *Results*
 
-==== *Metrics table (nano vs small)*
+==== *Metrics table*
 
 Evaluated on the `test` split (32 samples), `conf=0.5`, NMS `iou=0.5`, eval `iou=0.5`.
 
